@@ -1,19 +1,22 @@
 import java.util.Date.*; 
-import java.sql.Timestamp; 
+import java.sql.*; 
 
 public class Contribution
 {
-	private int id, contributor_id,state;
+	private int id, state;
 	private double contribution_score, lat, lng;
-	Object[] data; 
-	Timestamp created_at, last_updated_at; 
-	public Contribution(int id, int contributor_id, Object[] data, double lat, double lng)
+	private String message; 
+	private Object[] data; 
+	private Timestamp created_at, last_updated_at; 
+	private Account contributor; 
+	public Contribution(int id, String message, Object[] data, double lat, double lng, Account contributor)
 	{
 		this.id=id; 
-		this.contributor_id = contributor_id; 
+		this.contributor = contributor;
 		this.data = data;
 		this.lat = lat;
 		this.lng = lng; 
+		this.message = message; 
 	}
 
 	public int getId()
@@ -21,9 +24,9 @@ public class Contribution
 		return id; 
 	}
 
-	public int getContributorId()
+	public Account getContributor()
 	{
-		return contributor_id; 
+		return contributor; 
 	}
 
 	public double getContributionScore()
