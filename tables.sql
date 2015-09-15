@@ -7,6 +7,7 @@ CREATE TABLE Accounts(
 	last_updated_at timestamp NOT NULL,
 	e_mail_address varchar(25) UNIQUE NOT NULL, 
 	trust_rating double NOT NULL, 
+	trust_validity double NOT NULL,
 	last_lat double NOT NULL,
 	last_lng double NOT NULL,
 
@@ -19,6 +20,7 @@ CREATE TABLE Contributions(
 	contributor_id int NOT NULL, 
 	message varchar(150) NOT NULL,
 	contribution_score double NOT NULL, 
+	score_validity double NOT NULL, 
 	data_array varchar(150) NOT NULL,
 	created_at timestamp NOT NULL,
 	state int(4) NOT NULL,
