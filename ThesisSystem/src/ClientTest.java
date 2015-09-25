@@ -2,15 +2,15 @@ import java.util.*;
 import java.io.*;
 import java.net.*;
 
-public class Client{
+public class ClientTest{
 	private String serverURL;
 	HttpURLConnection connection;
 
 	public static void main(String[] args) throws Exception{
-		System.out.println(new Client("http://localhost:8000/create").post("lol"));
+		System.out.println(new ClientTest("http://localhost:8000/create").post("lol"));
 	}
 
-	public Client(String url) throws Exception{
+	public ClientTest(String url) throws Exception{
 		serverURL = url;
 		URL obj = new URL(url);
 		connection = (HttpURLConnection) obj.openConnection();
