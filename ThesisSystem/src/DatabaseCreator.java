@@ -33,14 +33,24 @@ public class DatabaseCreator {
         try{
             Statement st = conn.createStatement(); 
             st.executeUpdate("CREATE DATABASE " + conf.getClientName()); 
-            return key;
+	    st = conn.createStatement();
+	    String sql = "INSERT INTO Clients(key, validation_time, default_score, rating_scale)"
+		    + "VALUES(\"" + key +"\", " + conf.getValidationTime() + ", " + conf.getDefaultScore() +", " + conf.getRatingScale() +");"; 
+	    st.executeUpdate(sql); 
+            return key; 
         }catch(Exception e)
         {
+	    e.printStackTrace(); 
             return null; 
         }
     }
     
-    public boolean createTables()
+    public String getKey()
+    {
+	return key; 
+    }
+    
+    public boolean createTables(Connection conn)
     {
 	try{
 	    Statement st = conn.createStatement(); 
@@ -105,6 +115,7 @@ public class DatabaseCreator {
 	    return true; 
 	}catch(Exception e)
 	{
+	    e.printStackTrace(); 
 	    return false; 
 	}
     }
