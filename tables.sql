@@ -12,7 +12,6 @@ CREATE TABLE Accounts(
 CREATE TABLE Contributions(
 	contribution_id int AUTO_INCREMENT,
 	contributor_id int NOT NULL, 
-	message varchar(150) NOT NULL,
 	contribution_score double NOT NULL, 
 	score_validity double NOT NULL, 
 	created_at timestamp NOT NULL,
