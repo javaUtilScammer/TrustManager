@@ -25,7 +25,9 @@ public class Account
 	{
 	    try{
 		Statement st = conn.createStatement();
-		String update; 
+		String update = "UPDATE Accounts"
+			+ "SET last_updated_at = " + last_updated_at + ", trust_rating = " + trust_rating + ", trust_validity = " + trust_validity  
+			+ "WHERE account_id = " + account_id; 
 		
 		return true; 
 	    }catch(SQLException e)

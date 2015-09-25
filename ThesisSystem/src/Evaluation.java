@@ -4,29 +4,38 @@ import java.sql.*;
 public class Evaluation
 {
 	int evaluation_id; 
-	String message; 
 	double rating; 
 	Timestamp created_at;
 	Account created_by;
 	Contribution contribution; 
-	public Evaluation(int evaluation_id, String message, double rating, Timestamp created_at, Account created_by, Contribution contribution)
+	public Evaluation(int evaluation_id, double rating, Timestamp created_at, Account created_by, Contribution contribution)
 	{
 		this.evaluation_id = evaluation_id;
-		this.message = message;
 		this.rating = rating;
 		this.created_at = created_at; 
 		this.created_by = created_by; 
 		this.contribution = contribution; 
 	}
+	
+	public boolean updateDB(Connection conn)
+	{
+	    try{
+		Statement st = conn.createStatement();
+		String update = "UPDATE Evaluations"
+			+ "SET rating = " + rating
+			+ "WHERE evaluation_id = " + evaluation_id; 
+		
+		return true; 
+	    }catch(SQLException e)
+	    {
+		e.printStackTrace(); 
+		return false; 
+	    }
+	}
 
 	public int getId()
 	{
 		return evaluation_id; 
-	}
-
-	public String getMessage()
-	{
-		return message; 
 	}
 
 	public double getRating()
