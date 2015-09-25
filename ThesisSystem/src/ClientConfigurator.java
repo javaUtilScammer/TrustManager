@@ -15,11 +15,11 @@ import java.util.Scanner;
  */
 public class ClientConfigurator implements HttpHandler {
     
-    Gson gson;
-    Connection conn;
-    Server server;
-    String root = "jdbc:mysql://localhost/";
-    String url = "jdbc:mysql://localhost/clientservers";
+    private Gson gson;
+    private Connection conn;
+    private Server server;
+    private String root = "jdbc:mysql://localhost/";
+    private String url = "jdbc:mysql://localhost/clientservers";
     
     public ClientConfigurator(Server server, String username, String password){
         this.server = server;
@@ -27,6 +27,11 @@ public class ClientConfigurator implements HttpHandler {
         try {
             conn = DriverManager.getConnection(url,username,password);
         } catch (SQLException e) { e.printStackTrace();}
+    }
+    
+    public Connection getConnection()
+    {
+	return conn; 
     }
     
     public void handle(HttpExchange t) throws IOException {

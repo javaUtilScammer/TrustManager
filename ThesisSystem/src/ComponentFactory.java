@@ -60,7 +60,7 @@ public class ComponentFactory {
             int accId = (int) map.get("accId");
             int conId = (int) map.get("conId");
             Account contributor = intrface.getAccount(accId);
-            Contribution cont = intrface.getContributor(conId);
+            Contribution cont = intrface.getContribution(conId);
             double rating = (double) map.get("rating");
             Timestamp created_at = (Timestamp) map.get("created_at");
             int state = (int) map.get("state");
