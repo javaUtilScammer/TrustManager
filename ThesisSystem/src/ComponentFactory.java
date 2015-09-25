@@ -25,6 +25,9 @@ public class ComponentFactory {
     public ComponentFactory(Connection con, ClientInterface ci){
         conn = con;
         intrface = ci;
+        ab = new AccountBuilder();
+        cb = new ContributionBuilder();
+        eb = new EvaluationBuilder();
     }
     
     public int create(String json){
@@ -36,17 +39,12 @@ public class ComponentFactory {
         System.out.println(type.equals("account"));
         int ret = -1;
         if(type.equals("account")){
-            System.out.println("troll");
             ab.setConnection(conn);
-            System.out.println("hooooy");
             String username = (String) map.get("username");
-            System.out.println("hooooy1");
             Timestamp created_at = Timestamp.valueOf((String)map.get("created_at"));
-            System.out.println("hooooy2");
             Timestamp last_updated_at = Timestamp.valueOf((String)map.get("last_updated_at"));
-            System.out.println("hooooy3");
-            double trust_rating = (double) map.get("trust_rating");
-            double trust_validity = (double) map.get("trust_validity");
+            Double trust_rating = Double.parseDouble((String)map.get("trust_rating"));
+            Double trust_validity = Double.parseDouble((String)map.get("trust_validity"));
             Account ac = ab.buildAccount(username, created_at, last_updated_at, trust_rating, trust_validity);
             intrface.putAccount(ac.getId(), ac);
             ab.releaseConnection();
@@ -56,8 +54,8 @@ public class ComponentFactory {
             cb.setConnection(conn);
             int id = (int) map.get("id");
             Account contributor = intrface.getAccount(id);
-            double contribution_score = (double) map.get("contribution_score");
-            double score_validity = (double) map.get("score_validity");
+            Double contribution_score = Double.parseDouble((String)map.get("contribution_score"));
+            Double score_validity = Double.parseDouble((String)map.get("score_validity"));
             Timestamp created_at = Timestamp.valueOf((String)map.get("created_at"));
             int state = (int) map.get("state");
             Contribution co = cb.buildContribution(contributor,contribution_score, score_validity, created_at, state);
@@ -71,15 +69,13 @@ public class ComponentFactory {
             int conId = (int) map.get("conId");
             Account contributor = intrface.getAccount(accId);
             Contribution cont = intrface.getContribution(conId);
-            double rating = (double) map.get("rating");
+            Double rating = Double.parseDouble((String)map.get("rating"));
             Timestamp created_at = Timestamp.valueOf((String)map.get("created_at"));
-            int state = (int) map.get("state");
             Evaluation ev = eb.buildEvaluation(rating, created_at, contributor, cont);
             intrface.putEvaluation(ev.getId(), ev);
             eb.releaseConnection();
             ret = 3;
         }
-        System.out.println("RET: "+ret);
         return ret;
     }
     

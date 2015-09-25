@@ -15,9 +15,7 @@ public abstract class ComponentBuilder
     Connection conn;
     public void setConnection(Connection conn)
     {
-        System.out.println("WHYYYY");
 	this.conn = conn;
-        System.out.println("PLEEASE");
     }
     
     public Connection releaseConnection()
