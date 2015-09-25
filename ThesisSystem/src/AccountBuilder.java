@@ -15,7 +15,7 @@ import java.sql.Timestamp;
  */
 public class AccountBuilder extends ComponentBuilder
 {
-    public Account buildAccount(String username, Timestamp created_at, Timestamp last_updated_at, double trust_rating, double trust_validity, Connection conn) 
+    public Account buildAccount(String username, Timestamp created_at, Timestamp last_updated_at, double trust_rating, double trust_validity) 
     {
 	try{
 	    Statement st = conn.createStatement(); 

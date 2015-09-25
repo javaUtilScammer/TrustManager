@@ -5,8 +5,6 @@ import com.sun.net.httpserver.HttpHandler;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
@@ -15,10 +13,10 @@ import java.util.Scanner;
  */
 public class ClientInterfaceHandler implements HttpHandler {
     
-    Gson gson;
-    Connection conn;
-    Server server;
-    String url;
+    private Gson gson;
+    private Connection conn;
+    private Server server;
+    private String url;
     
     public ClientInterfaceHandler(){
         
