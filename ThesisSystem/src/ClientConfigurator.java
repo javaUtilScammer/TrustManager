@@ -36,7 +36,7 @@ public class ClientConfigurator implements HttpHandler {
     
     public void handle(HttpExchange t) throws IOException {
         String req = t.getRequestMethod();
-        System.out.println("Method: "+req);
+        System.out.println("Method1: "+req);
         Scanner sc = new Scanner(t.getRequestBody());
         StringBuilder sb = new StringBuilder();
         while(sc.hasNextLine()) sb.append(sc.nextLine());

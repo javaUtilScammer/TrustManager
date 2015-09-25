@@ -25,7 +25,7 @@ public class ConnectionPool {
         try{
             for(int i=0; i<capacity; i++) pool.offer(DriverManager.getConnection(url,user,pass));
         }
-        catch(SQLException e){ e.printStackTrace();}
+        catch(Exception e){ e.printStackTrace();}
     }
     
     public Connection getConnection(){
