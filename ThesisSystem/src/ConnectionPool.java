@@ -19,11 +19,11 @@ public class ConnectionPool {
     ArrayDeque<Connection> pool;
     final int capacity = 50;
     
-    public ConnectionPool(String url){
+    public ConnectionPool(String url,String user, String pass){
         this.url = url;
         pool = new ArrayDeque<Connection>();
         try{
-            for(int i=0; i<capacity; i++) pool.offer(DriverManager.getConnection(url));
+            for(int i=0; i<capacity; i++) pool.offer(DriverManager.getConnection(url,user,pass));
         }
         catch(SQLException e){ e.printStackTrace();}
     }

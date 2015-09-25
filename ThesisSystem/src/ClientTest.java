@@ -8,13 +8,13 @@ public class ClientTest{
     Configuration config;
 
     public static void main(String[] args) throws Exception{
-            System.out.println(new ClientTest("http://localhost:8000/create").postConfig());
+            new ClientTest("http://localhost:8000/create").postConfig();
     }
 
     public ClientTest(String url) throws Exception{
             serverURL = url;
             URL obj = new URL(url);
-            config = new Configuration("testClient","testValidation",10);
+            config = new Configuration("testClient","testValidation",10,50,5);
             connection = (HttpURLConnection) obj.openConnection();
     }
 
