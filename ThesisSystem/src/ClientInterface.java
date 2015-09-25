@@ -10,9 +10,9 @@ import java.util.HashMap;
 public class ClientInterface {
     private final String client_name, validation_type, key;
     private final int validation_time;
-    private final double default_score, rating_scale;
+    private final double default_score, rating_scale, score_validity;
     final ConnectionPool pool;
-    private ComponentFactory compFactory;
+    private final ComponentFactory compFactory;
     private final Server server;
     private HashMap<Integer,Account> accMap;
     private HashMap<Integer,Contribution> contMap;
@@ -25,13 +25,14 @@ public class ClientInterface {
         validation_type = config.getValidationType();
         validation_time = config.getValidationTime();
         default_score = config.getDefaultScore();
+        score_validity = default_score;
         rating_scale = config.getRatingScale();
         this.server = server;
         accMap = new HashMap<Integer, Account>();
         contMap = new HashMap<Integer, Contribution>();
         evalMap = new HashMap<Integer, Evaluation>();
-        ClientInterfaceHandler handler = new ClientInterfaceHandler();
-        compFactory = new ComponentFactory(pool.getConnection());
+        server.httpserver.createContext("/"+key,new ClientInterfaceHandler(this));
+        compFactory = new ComponentFactory(pool.getConnection(),this);
     }
     
     public void loadDB()

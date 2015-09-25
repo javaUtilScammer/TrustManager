@@ -20,9 +20,11 @@ public class ComponentFactory {
     private AccountBuilder ab;
     private ContributionBuilder cb;
     private EvaluationBuilder eb;
+    ClientInterface intrface;
     
-    public ComponentFactory(Connection con){
+    public ComponentFactory(Connection con, ClientInterface ci){
         conn = con;
+        intrface = ci;
     }
     
     public void create(String json){
@@ -37,14 +39,34 @@ public class ComponentFactory {
             Timestamp last_updated_at = (Timestamp) map.get("last_updated_at");
             double trust_rating = (double) map.get("trust_rating");
             double trust_validity = (double) map.get("trust_validity");
-            ab.buildAccount(username, created_at, last_updated_at, trust_rating, trust_validity);
+            Account ac = ab.buildAccount(username, created_at, last_updated_at, trust_rating, trust_validity);
+            intrface.putAccount(ac.getId(), ac);
             ab.releaseConnection();
         }
         else if(type.equals("contribution")){
-            
+            cb.setConnection(conn);
+            int id = (int) map.get("id");
+            Account contributor = intrface.getAccount(id);
+            double contribution_score = (double) map.get("contribution_score");
+            double score_validity = (double) map.get("score_validity");
+            Timestamp created_at = (Timestamp) map.get("created_at");
+            int state = (int) map.get("state");
+            Contribution co = cb.buildContribution(contributor,contribution_score, score_validity, created_at, state);
+            intrface.putContribution(co.getId(), co);
+            cb.releaseConnection();
         }
         else if(type.equals("evaluation")){
-            
+            eb.setConnection(conn);
+            int accId = (int) map.get("accId");
+            int conId = (int) map.get("conId");
+            Account contributor = intrface.getAccount(accId);
+            Contribution cont = intrface.getContributor(conId);
+            double rating = (double) map.get("rating");
+            Timestamp created_at = (Timestamp) map.get("created_at");
+            int state = (int) map.get("state");
+            Evaluation ev = eb.buildEvaluation(rating, created_at, contributor, cont);
+            intrface.putEvaluation(ev.getId(), ev);
+            eb.releaseConnection();
         }
     }
     

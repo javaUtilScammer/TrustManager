@@ -10,8 +10,9 @@ import java.util.*;
 public class Server {
     
     private ArrayList<ClientInterface> clients;
-    HttpServer server;
+    HttpServer httpserver;
     private String username, password;
+    ClientConfigurator config;
     
     public static void main(String[] args) throws Exception {
         new Server("root", "root");
@@ -22,13 +23,14 @@ public class Server {
         username = user;
         password = pass;
         try{
-             server = HttpServer.create(new InetSocketAddress(8000), 0);
+             httpserver = HttpServer.create(new InetSocketAddress(8000), 0);
         }
         catch(IOException e){ e.printStackTrace();}
         
-        server.createContext("/create", new ClientConfigurator(this,user,pass));
-        server.setExecutor(null); // creates a default executor
-        server.start();
+        config = new ClientConfigurator(this,user,pass);
+        httpserver.createContext("/create", config);
+        httpserver.setExecutor(null); // creates a default executor
+        httpserver.start();
         System.out.println("Server started");
     }
     
