@@ -35,17 +35,3 @@ CREATE TABLE Evaluations(
 	FOREIGN KEY(contribution_id) REFERENCES Contributions(contribution_id)
 		ON DELETE CASCADE
 );
-
-CREATE TABLE Comments(
-	comment_id int AUTO_INCREMENT,
-	message varchar(150) NOT NULL,
-	created_at timestamp NOT NULL,
-	account_id int NOT NULL, 
-	evaluation_id int NOT NULL, 
-
-	PRIMARY KEY(comment_id),
-	FOREIGN KEY(account_id) REFERENCES Accounts(account_id)
-		ON DELETE CASCADE,
-	FOREIGN KEY(evaluation_id) REFERENCES Evaluations(evaluation_id)
-		ON DELETE CASCADE
-);

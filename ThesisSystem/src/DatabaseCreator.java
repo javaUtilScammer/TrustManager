@@ -97,21 +97,7 @@ public class DatabaseCreator {
 				");";
 	    
 	    st.executeUpdate(evaluations); 
-	    
-	    st = conn.createStatement();
-	    String comments = "CREATE TABLE Comments(" +
-			    "	comment_id int AUTO_INCREMENT," +
-			    "	message varchar(150) NOT NULL," +
-			    "	created_at timestamp NOT NULL," +
-			    "	account_id int NOT NULL," +
-			    "	evaluation_id int NOT NULL," +
-			    "	PRIMARY KEY(comment_id)," +
-			    "	FOREIGN KEY(account_id) REFERENCES Accounts(account_id)" +
-			    "		ON DELETE CASCADE," +
-			    "	FOREIGN KEY(evaluation_id) REFERENCES Evaluations(evaluation_id)" +
-			    "		ON DELETE CASCADE" +
-			    ");";
-	    st.executeUpdate(comments); 
+	   
 	    return true; 
 	}catch(Exception e)
 	{
