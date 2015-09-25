@@ -19,7 +19,7 @@ public class EvaluationBuilder extends ComponentBuilder
 	try{
 	    Statement st = conn.createStatement(); 
 	    String sql = "INSERT INTO Evaluations(rating, created_at, created_by, contribution_id)"
-		    + "VALUES(" + rating+", "+ created_at + ", " + created_by.getId() + ", " + contribution.getId() + ");";
+		    + "VALUES(" + rating+", \""+ created_at + "\", " + created_by.getId() + ", " + contribution.getId() + ");";
 	    st.executeUpdate(sql); 
 	    
 	    st = conn.createStatement(); 
