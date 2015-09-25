@@ -33,7 +33,7 @@ public class DatabaseCreator {
         try{
             Statement st = conn.createStatement(); 
             st.executeUpdate("CREATE DATABASE " + conf.getClientName()); 
-            return key; 
+            return key;
         }catch(Exception e)
         {
             return null; 

@@ -8,5 +8,6 @@ public class ClientInterface {
         client_name = config.getClientName();
         validation_type = config.getValidationType();
         validation_time = config.getValidationTime();
+        
     }
 }
