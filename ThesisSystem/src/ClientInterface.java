@@ -8,7 +8,7 @@ public class ClientInterface {
     private final int validation_time;
     private final double default_score, rating_scale, score_validity;
     final ConnectionPool pool;
-    private final ComponentFactory compFactory;
+    final ComponentFactory compFactory;
     private final Server server;
     private HashMap<Integer,Account> accMap;
     private HashMap<Integer,Contribution> contMap;
