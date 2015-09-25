@@ -20,7 +20,7 @@ public class ContributionBuilder extends ComponentBuilder
 	try{
 	    Statement st = conn.createStatement(); 
 	    String sql = "INSERT INTO Contributions(contributor_id, contribution_score, score_validity, created_at, state)"
-		    + "VALUES(" + contributor.getId() +", "+ contribution_score + ", " + score_validity + ", " + created_at + ", " + state + ");";
+		    + "VALUES(" + contributor.getId() +", "+ contribution_score + ", " + score_validity + ", \"" + created_at + "\", " + state + ");";
 	    st.executeUpdate(sql); 
 	    
 	    st = conn.createStatement(); 
