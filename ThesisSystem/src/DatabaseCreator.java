@@ -44,7 +44,7 @@ public class DatabaseCreator {
     {
 	try{
 	    Statement st = conn.createStatement(); 
-	    String accounts = "CREATE TABLE Accounts(\n" +
+	    String accounts = "CREATE TABLE Accounts(" +
 			"	account_id int AUTO_INCREMENT," +
 			"	username varchar(15) UNIQUE NOT NULL," +
 			"	created_at timestamp NOT NULL," +
