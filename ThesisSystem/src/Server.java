@@ -32,6 +32,10 @@ public class Server {
         System.out.println("Server started");
     }
     
+    public void reloadDB()
+    {
+    }
+    
     public void integrateClientInterface(ClientInterface cf){
         clients.add(cf);
     }
