@@ -17,10 +17,28 @@ public class ClientTest{
            String updated_at = gson.toJson("2015-09-26 12:23:10");
            json+=updated_at+",\"trust_rating\":\"3.0\",\"trust_validity\":\"2.5\",\"type\":\"account";
            json+="\"}";
-//           System.out.println(json);
-//           System.out.println(test.post(json));
            System.out.println("teeest");
-           test.post(json);
+           int accId = Integer.parseInt(test.post(json));
+           created_at = gson.toJson("1995-02-29 01:02:03");
+           json = "{\"username\":\"test\",\"created_at\":";
+           json+=created_at+",\"last_updated_at\":";
+           updated_at = gson.toJson("2015-09-27 04:05:06");
+           json+=updated_at+",\"trust_rating\":\"4.0\",\"trust_validity\":\"1.5\",\"type\":\"account";
+           json+="\"}";
+           int accId2 = Integer.parseInt(test.post(json));
+           System.out.println("Account create: "+accId2);
+           json = "{\"account_id\":\""+accId+"\",\"contribution_score\":";
+           json+= "\"2.0\",\"score_validity\":\"0.5\",\"created_at\":";
+           created_at = gson.toJson("2015-09-28 01:02:03");
+           json+= created_at+",\"state\":\"2\",\"type\":\"contribution\"}";
+           int conId = Integer.parseInt(test.post(json));
+           System.out.println("Contribution create: "+conId);
+           json = "{\"rating\":\"1.0\",\"created_at\":";
+           created_at = gson.toJson("2015-09-30 02:02:02");
+           json+=created_at+",\"account_id\":\""+accId2+"\",";
+           json+="\"contribution_id\":\""+conId+"\",\"type\":\"evaluation\"}";
+           int evaId = Integer.parseInt(test.post(json));
+           System.out.println("Evaluation create: "+evaId);
     }
 
     public ClientTest(String url) throws Exception{

@@ -25,10 +25,9 @@ public class ClientInterfaceHandler implements HttpHandler {
         while(sc.hasNextLine()) sb.append(sc.nextLine());
         System.out.println(sb);
         int resp = intrface.compFactory.create(sb.toString());
-        String response = "ERROR";
-        if(resp==1) response = "Account Created";
-        else if(resp==2) response = "Contribution Created";
-        else if(resp==3) response = "Evaluation Created";
+        String response = "";
+        if(resp==-1) response = "ERROR";
+        else response = resp+"";
         t.sendResponseHeaders(200, response.length());
         OutputStream os = t.getResponseBody();
         os.write(response.getBytes());

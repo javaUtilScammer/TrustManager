@@ -36,7 +36,6 @@ public class ComponentFactory {
         map = (HashMap<String, Object>)gson.fromJson(json, map.getClass());
         String type = (String) map.get("type");
         System.out.println("type: "+type);
-        System.out.println(type.equals("account"));
         int ret = -1;
         if(type.equals("account")){
             ab.setConnection(conn);
@@ -48,25 +47,25 @@ public class ComponentFactory {
             Account ac = ab.buildAccount(username, created_at, last_updated_at, trust_rating, trust_validity);
             intrface.putAccount(ac.getId(), ac);
             ab.releaseConnection();
-            ret = 1;
+            ret = ac.getId();
         }
         else if(type.equals("contribution")){
             cb.setConnection(conn);
-            int id = (int) map.get("id");
+            int id = Integer.parseInt((String)map.get("account_id"));
             Account contributor = intrface.getAccount(id);
             Double contribution_score = Double.parseDouble((String)map.get("contribution_score"));
             Double score_validity = Double.parseDouble((String)map.get("score_validity"));
             Timestamp created_at = Timestamp.valueOf((String)map.get("created_at"));
-            int state = (int) map.get("state");
+            int state = Integer.parseInt((String)map.get("state"));
             Contribution co = cb.buildContribution(contributor,contribution_score, score_validity, created_at, state);
             intrface.putContribution(co.getId(), co);
             cb.releaseConnection();
-            ret = 2;
+            ret = co.getId();
         }
         else if(type.equals("evaluation")){
             eb.setConnection(conn);
-            int accId = (int) map.get("accId");
-            int conId = (int) map.get("conId");
+            int accId = Integer.parseInt((String)map.get("account_id"));
+            int conId = Integer.parseInt((String)map.get("contribution_id"));
             Account contributor = intrface.getAccount(accId);
             Contribution cont = intrface.getContribution(conId);
             Double rating = Double.parseDouble((String)map.get("rating"));
@@ -74,7 +73,7 @@ public class ComponentFactory {
             Evaluation ev = eb.buildEvaluation(rating, created_at, contributor, cont);
             intrface.putEvaluation(ev.getId(), ev);
             eb.releaseConnection();
-            ret = 3;
+            ret = ev.getId();
         }
         return ret;
     }
