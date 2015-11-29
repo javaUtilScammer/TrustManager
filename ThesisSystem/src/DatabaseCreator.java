@@ -34,8 +34,8 @@ public class DatabaseCreator {
 			Statement st = conn.createStatement(); 
 			st.executeUpdate("CREATE DATABASE " + conf.getClientName()); 
 			st = conn.createStatement();
-			String sql = "INSERT INTO Clients(client_key, validation_time, default_score, rating_scale)"
-			+ "VALUES(\"" + key +"\", " + conf.getValidationTime() + ", " + conf.getDefaultScore() +", " + conf.getRatingScale() +");"; 
+			String sql = "INSERT INTO Clients(client_key, validation_time, default_score, rating_scale, degree_of_strictness, beta_factor, active_user_time, active_evaluation_time)"
+			+ "VALUES(\"" + key +"\", " + conf.getValidationTime() + ", " + conf.getDefaultScore() +", " + conf.getRatingScale() +", " + conf.getDegreeOfStrictness() + ", " + conf.getBetaFactor() + ", " + conf.getActiveUserTime() + ", " + conf.getActiveEvaluationTime() +");"; 
 			st.executeUpdate(sql);
 			return key; 
         }
