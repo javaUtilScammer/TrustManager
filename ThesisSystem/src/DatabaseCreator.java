@@ -60,7 +60,7 @@ public class DatabaseCreator {
 			"	created_at timestamp NOT NULL," +
 			"	last_updated_at timestamp NOT NULL," +
 			"	trust_rating double NOT NULL," +
-			"	trust_validity double NOT NULL," +
+			"	trust_confidence double NOT NULL," +
 			"	PRIMARY KEY(account_id)" +
 			");";
 	    
@@ -71,7 +71,7 @@ public class DatabaseCreator {
 		"	contribution_id int AUTO_INCREMENT," +
 		"	contributor_id int NOT NULL," +
 		"	contribution_score double NOT NULL," +
-		"	score_validity double NOT NULL," +
+		"	score_confidence double NOT NULL," +
 		"	created_at timestamp NOT NULL," +
 		"	state int(4) NOT NULL," +
 		"	PRIMARY KEY(contribution_id)," +
