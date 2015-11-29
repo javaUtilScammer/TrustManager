@@ -57,7 +57,6 @@ public class ComponentFactory {
             int state = (int) ((double) map.get("state"));
             Contribution co = cb.buildContribution(contributor,contribution_score, score_validity, created_at, state);
             // System.out.println("Contribution "+co.getContributionScore());
-            contributor.contributions.add(co);
             intrface.putContribution(co.getId(), co);
             intrface.addScorerComponent(co);
             cb.releaseConnection();

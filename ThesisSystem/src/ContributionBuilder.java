@@ -31,7 +31,7 @@ public class ContributionBuilder extends ComponentBuilder
 	    contribution_id = rs.getInt(1); 
 	    
 	    Contribution temp = new Contribution(contribution_id, contributor, contribution_score, score_confidence, created_at, state);
-	    
+	    contributor.getContributions().add(temp);
 	    return temp; 
 	    
 	}catch(Exception e)

@@ -28,9 +28,8 @@ public class EvaluationBuilder extends ComponentBuilder
 	    int evaluation_id = -1; 
 	    rs.next(); 
 	    evaluation_id = rs.getInt(1); 
-	    
 	    Evaluation temp = new Evaluation(evaluation_id, rating, created_at, created_by, contribution); 
-	    
+	    created_by.getEvaluations().add(temp); 
 	    return temp; 
 	    
 	}catch(Exception e)

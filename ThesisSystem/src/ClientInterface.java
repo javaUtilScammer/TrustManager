@@ -77,7 +77,9 @@ public class ClientInterface {
 		if(state!=0) //If state == 0 validation_phase - should load it
 		    continue; 
 		
+                
 		Contribution cont = new Contribution(contribution_id, acc, contribution_score, score_confidence, created_at, state);
+                acc.getContributions().add(cont); 
 		contMap.put(contribution_id,cont);
 	    }
 	    
@@ -95,6 +97,7 @@ public class ClientInterface {
 		Contribution cont = contMap.get(contribution_id); 
 		
 		Evaluation eval = new Evaluation(evaluation_id, rating, created_at, evaluator, cont); 
+                evaluator.getEvaluations().add(eval); 
 		evalMap.put(evaluation_id, eval); 
 	    }
 	    pool.returnConnection(conn); 

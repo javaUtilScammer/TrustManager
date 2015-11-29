@@ -9,6 +9,7 @@ public class Account extends Component
 {
 	private int account_id;
 	ArrayList<Contribution> contributions;
+        ArrayList<Evaluation> evaluations; 
 	private String username;
 	private Timestamp created_at, last_updated_at;
 	private double trust_rating, trust_confidence;
@@ -21,6 +22,7 @@ public class Account extends Component
 		this.last_updated_at = last_updated_at; 
 		this.trust_rating = trust_rating;
 		this.trust_confidence = trust_confidence;
+                evaluations = new ArrayList<Evaluation>(); 
 		type = 'a';
 		contributions = new ArrayList<Contribution>();
 	}
@@ -70,18 +72,28 @@ public class Account extends Component
 	{
 		return trust_confidence; 
 	}
-
+        
+        public ArrayList<Evaluation> getEvaluations()
+        {
+            return evaluations; 
+        }
+        
+        public ArrayList<Contribution> getContributions()
+        {
+            return contributions; 
+        }
+        
 	public void setTrustRating(double tr, Connection conn){
-		trust_rating = tr;
-		updateDB(conn);
+            trust_rating = tr;
+            updateDB(conn);
 	}
         
         public void setTrustConfidence(double tr, Connection conn){
-		trust_confidence = tr;
-		updateDB(conn);
+            trust_confidence = tr;
+            updateDB(conn);
 	}
 
 	public void setTrustRating(double tr){
-		trust_rating = tr;
+            trust_rating = tr;
 	}
 }
