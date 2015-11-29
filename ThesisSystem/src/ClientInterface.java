@@ -132,7 +132,9 @@ public class ClientInterface {
     }
     
     public void score(Evaluation ev, int ci){
-        scorer.calculateScore(ev, ci);
+        Contribution cont = contMap.get(ci); 
+        if(cont==null || ev==null) return; 
+        scorer.calculateScore(ev, cont);
     }
 
     public double getRatingScale(){

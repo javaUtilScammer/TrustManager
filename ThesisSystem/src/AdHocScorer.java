@@ -8,6 +8,13 @@
  *
  * @author hadrianang
  */
-public class AdHocScorer {
+public class AdHocScorer extends Scorer{
     
+    public void calculateScore()
+    {
+    }
+    
+    public void calculateScore(Evaluation ev, Contribution cont)
+    {
+    }
 }

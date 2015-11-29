@@ -18,6 +18,6 @@ public abstract class Scorer {
 	}
 
 	abstract void calculateScore();
-	abstract void calculateScore(Evaluation ev, int ci);
+	abstract void calculateScore(Evaluation ev, Contribution cont);
         
 }

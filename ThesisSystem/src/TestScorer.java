@@ -12,10 +12,10 @@ public class TestScorer extends Scorer{
     	//do nothing
     }
 
-    public void calculateScore(Evaluation ev, int ci){
+    public void calculateScore(Evaluation ev, Contribution cont){
     	// System.out.println("validating");
         Evaluation eval = ev;
-        Contribution con = intrface.getContribution(ci);
+        Contribution con = cont;
         Account acc = eval.getCreatedBy();
         double accRating = acc.getTrustRating();
         double evalScore = eval.getRating();

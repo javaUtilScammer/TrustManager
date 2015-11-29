@@ -111,7 +111,7 @@ public class PageRankScorer extends Scorer{
 		System.out.println(Arrays.toString(arr));
     }
 
-    public void calculateScore(Evaluation ev, int ci){
+    public void calculateScore(Evaluation ev, Contribution cont){
     	calculateScore();
     }
 }
