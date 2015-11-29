@@ -9,15 +9,15 @@ public abstract class Scorer {
     ArrayList<Component> compList;
     Connection conn;
 
-	public Scorer(ClientInterface in){
-		intrface = in;
-		rating_scale = intrface.getRatingScale();
-		score_validity = intrface.getScoreValidity();
-		conn = intrface.pool.getConnection();
-		compList = new ArrayList<Component>();
-	}
+    public Scorer(ClientInterface in){
+            intrface = in;
+            rating_scale = intrface.getRatingScale();
+            score_validity = intrface.getScoreValidity();
+            conn = intrface.pool.getConnection();
+            compList = new ArrayList<Component>();
+    }
 
-	abstract void calculateScore();
-	abstract void calculateScore(Evaluation ev, Contribution cont);
+    abstract void calculateScore();
+    abstract void calculateScore(Evaluation ev, Contribution cont);
         
 }
