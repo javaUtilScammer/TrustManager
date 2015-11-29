@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Contribution extends Component
 {
 	private int contribution_id, state;
-	ArrayList<Evaluation> evaluations;
+	private ArrayList<Evaluation> evaluations;
 	private double contribution_score, score_confidence, lat, lng;
 	private Timestamp created_at; 
 	private Account contributor; 
@@ -37,7 +37,12 @@ public class Contribution extends Component
 	    }
 	}
 	
-
+        public ArrayList<Evaluation> getEvaluations()
+        {
+            return evaluations; 
+        }
+        
+        
 	public int getId()
 	{
             return contribution_id; 

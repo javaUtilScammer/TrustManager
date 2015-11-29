@@ -15,12 +15,12 @@ import java.sql.Timestamp;
  */
 public class AccountBuilder extends ComponentBuilder
 {
-    public Account buildAccount(String username, Timestamp created_at, Timestamp last_updated_at, double trust_rating, double trust_confidence) 
+    public Account buildAccount(String username, Timestamp created_at, Timestamp last_updated_at, double trust_rating, double trust_confidence, double cacc, double crej, double ctotal) 
     {
 	try{
 	    Statement st = conn.createStatement(); 
-	    String sql = "INSERT INTO Accounts(username, created_at, last_updated_at, trust_rating, trust_confidence)"
-		    + "VALUES(\"" + username + "\", \"" + created_at + "\", \"" + last_updated_at + "\", " + trust_rating + ", " + trust_confidence + ");";
+	    String sql = "INSERT INTO Accounts(username, created_at, last_updated_at, trust_rating, trust_confidence, contributions_accepted, contributions_rejected, contributons_total)"
+		    + "VALUES(\"" + username + "\", \"" + created_at + "\", \"" + last_updated_at + "\", " + trust_rating + ", " + trust_confidence + ", " + cacc + ", " + crej + ", " + ctotal + ");";
 	    st.executeUpdate(sql); 
 	    
 	    st = conn.createStatement(); 
@@ -30,7 +30,7 @@ public class AccountBuilder extends ComponentBuilder
 	    rs.next(); 
 	    account_id = rs.getInt(1); 
 	    
-	    Account temp = new Account(account_id, username, created_at, last_updated_at, trust_rating, trust_confidence); 
+	    Account temp = new Account(account_id, username, created_at, last_updated_at, trust_rating, trust_confidence, cacc, crej, ctotal); 
 	    return temp; 
 	    
 	}catch(Exception e)

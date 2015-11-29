@@ -60,8 +60,11 @@ public class ClientInterface {
 		Timestamp last_updated_at = rs.getTimestamp(4); 
 		double trust_rating = rs.getDouble(5);
 		double trust_confidence = rs.getDouble(6);
+                double cacc = rs.getDouble(7);
+                double crej = rs.getDouble(7);
+                double ctotal = rs.getDouble(7);
 		
-		Account acc = new Account(account_id, username, created_at, last_updated_at, trust_rating, trust_confidence); 
+		Account acc = new Account(account_id, username, created_at, last_updated_at, trust_rating, trust_confidence,cacc,crej,ctotal); 
 		accMap.put(account_id, acc);
 	    }
 	    

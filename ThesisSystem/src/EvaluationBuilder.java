@@ -31,6 +31,7 @@ public class EvaluationBuilder extends ComponentBuilder
 	    Evaluation temp = new Evaluation(evaluation_id, rating, created_at, created_by, contribution); 
 	    created_by.getEvaluations().add(temp); 
             created_by.setLastUpdatedAt(created_at,conn); 
+            created_by.addEv(); 
 	    return temp; 
 	    
 	}catch(Exception e)

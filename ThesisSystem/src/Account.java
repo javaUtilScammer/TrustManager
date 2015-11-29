@@ -7,14 +7,15 @@ import java.util.ArrayList;
 
 public class Account extends Component
 {
-	private int account_id;
+	private int account_id, num_ev;
 	ArrayList<Contribution> contributions;
         ArrayList<Evaluation> evaluations; 
 	private String username;
 	private Timestamp created_at, last_updated_at;
 	private double trust_rating, trust_confidence;
+        private double cacc, crej, ctotal; 
 
-	public Account(int account_id, String username, Timestamp created_at, Timestamp last_updated_at, double trust_rating, double trust_confidence)
+	public Account(int account_id, String username, Timestamp created_at, Timestamp last_updated_at, double trust_rating, double trust_confidence, double cacc, double crej, double ctotal)
 	{
 		this.account_id = account_id;
 		this.username = username; 
@@ -25,6 +26,10 @@ public class Account extends Component
                 evaluations = new ArrayList<Evaluation>(); 
 		type = 'a';
 		contributions = new ArrayList<Contribution>();
+                num_ev = 0;
+                for(int i=0;i<contributions.size();i++)
+                    num_ev += contributions.get(i).getEvaluations().size(); 
+                    
 	}
 	
 	public boolean updateDB(Connection conn)
@@ -32,8 +37,8 @@ public class Account extends Component
 	    try{
 		Statement st = conn.createStatement();
 		String update = "UPDATE Accounts"
-			+ "SET last_updated_at = \"" + last_updated_at + "\", trust_rating = " + trust_rating + ", trust_confidence = " + trust_confidence  
-			+ "WHERE account_id = " + account_id; 
+			+ "SET last_updated_at = \"" + last_updated_at + "\", trust_rating = " + trust_rating + ", trust_confidence = " + trust_confidence  + ", contributions_accepted = " + cacc + ", contributions_rejected = " + crej +   ", contributions_total = " + ctotal
+			+ " WHERE account_id = " + account_id; 
 		
 		return true; 
 	    }catch(SQLException e)
@@ -42,7 +47,51 @@ public class Account extends Component
 		return false; 
 	    }
 	}
-
+        
+        public void addEv()
+        {
+            num_ev++; 
+        }
+        
+        public int getNumEv()
+        {
+            return num_ev; 
+        }
+        
+        public double getAccepted()
+        {
+            return cacc;
+        }
+        
+        public double getRejected()
+        {
+            return crej;
+        }
+        
+        public double getTotal()
+        {
+            return ctotal; 
+        }
+        
+        public void setAccepted(double temp)
+        {
+            cacc += temp;
+            //updateDB(conn);
+            
+        }
+        public void setRejected(double temp)
+        {
+            crej += temp;
+            //updateDB(conn);
+            
+        }
+        public void setTotal(double temp)
+        {
+            ctotal += temp;
+            //updateDB(conn);
+            
+        }
+        
 	public int getId()
 	{
 		return account_id;

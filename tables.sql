@@ -5,6 +5,9 @@ CREATE TABLE Accounts(
 	last_updated_at timestamp NOT NULL,
 	trust_rating double NOT NULL, 
 	trust_confidence double NOT NULL,
+	contributions_accepted double NOT NULL,
+	contributions_rejected double NOT NULL,
+	contributions_total double NOT NULL,
 	PRIMARY KEY(account_id)
 );
 

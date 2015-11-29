@@ -22,6 +22,17 @@ public class AdHocScorer extends Scorer{
     {
     }
     
+    public double computeInitialScore(Contribution cont)
+    {
+        double active = intrface.getActiveCount();
+        double denom = Math.log(active) / Math.log(Math.E); 
+        denom = Math.pow(denom,degree_of_strictness);
+        double threshold = active/denom; 
+        
+        Account contributor = cont.getContributor(); 
+        return threshold * contributor.getTrustRating() * contributor.getTrustConfidence(); 
+    }
+    
     public void calculateScore(Evaluation ev, Contribution cont)
     {
         double currScore = cont.getContributionScore(); 
@@ -43,7 +54,18 @@ public class AdHocScorer extends Scorer{
         double trust_confidence = submit.getTrustConfidence(); 
         currScore += (scaled * trust_rating * trust_confidence); 
         Connection conn = intrface.getConnection(); 
-        cont.setContributionScore(currScore, conn);
+        cont.setContributionScore(currScore,conn);
+        Account contributor = cont.getContributor(); 
+
+            double conf = contributor.getTrustConfidence(); 
+            double active = intrface.getActiveCount();
+            double num = Math.log(active)/Math.log(Math.E); 
+            num = Math.pow(num,beta_factor); 
+            num/=active; 
+            num*=contributor.getNumEv(); 
+            conf = Math.min(1, 0.50 + 0.50*num );
+                    
+        contributor.setTrustConfidence(conf,conn); 
         intrface.returnConnection(conn);
         
     }
