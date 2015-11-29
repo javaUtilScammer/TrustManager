@@ -6,19 +6,19 @@ public class Contribution extends Component
 {
 	private int contribution_id, state;
 	ArrayList<Evaluation> evaluations;
-	private double contribution_score, score_validity, lat, lng;
+	private double contribution_score, score_confidence, lat, lng;
 	private Timestamp created_at; 
 	private Account contributor; 
-	public Contribution(int id, Account contributor, double contribution_score, double score_validity, Timestamp created_at, int state)
+	public Contribution(int id, Account contributor, double contribution_score, double score_confidence, Timestamp created_at, int state)
 	{
-		this.contribution_id=id; 
-		this.contributor = contributor;
-        this.contribution_score = contribution_score; 
-        this.score_validity = score_validity; 
-		this.created_at = created_at; 
-		this.state = state;
-		type = 'c';
-		evaluations = new ArrayList<Evaluation>();
+            this.contribution_id=id; 
+            this.contributor = contributor;
+            this.contribution_score = contribution_score; 
+            this.score_confidence = score_confidence; 
+            this.created_at = created_at; 
+            this.state = state;
+            type = 'c';
+            evaluations = new ArrayList<Evaluation>();
 	}
 	
 	public boolean updateDB(Connection conn)
@@ -26,7 +26,7 @@ public class Contribution extends Component
 	    try{
 		Statement st = conn.createStatement();
 		String update = "UPDATE Contributions"
-			+ "SET contribution_score = " + contribution_score + ", score_validity = " + score_validity + ", state = " + state  
+			+ "SET contribution_score = " + contribution_score + ", score_confidence = " + score_confidence + ", state = " + state  
 			+ "WHERE contribution_id = " + contribution_id; 
 		
 		return true; 
@@ -40,18 +40,23 @@ public class Contribution extends Component
 
 	public int getId()
 	{
-		return contribution_id; 
+            return contribution_id; 
 	}
 
 	public Account getContributor()
 	{
-		return contributor; 
+            return contributor; 
 	}
 
 	public double getContributionScore()
 	{
-		return contribution_score;
+            return contribution_score;
 	}
+        
+        public double getScoreConfidence()
+        {
+            return score_confidence; 
+        }
 
 	public double getLat()
 	{

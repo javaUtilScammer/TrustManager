@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class ClientInterface {
     private final String client_name, validation_type, key;
     private final int validation_time;
-    private final double default_score, rating_scale, score_validity;
+    private final double default_score, rating_scale, score_validity, degree_of_strictness, beta_factor, active_user_time, active_evaluation_time;
     final ConnectionPool pool;
     final ComponentFactory compFactory;
     private Scorer scorer;
@@ -25,6 +25,10 @@ public class ClientInterface {
         validation_type = config.getValidationType();
         validation_time = config.getValidationTime();
         default_score = config.getDefaultScore();
+        degree_of_strictness = config.getDegreeOfStrictness(); 
+        beta_factor = config.getBetaFactor();
+        active_user_time = config.getActiveUserTime();
+        active_evaluation_time = config.getActiveEvaluationTime(); 
         score_validity = default_score;
         rating_scale = config.getRatingScale();
         this.server = server;
@@ -104,6 +108,16 @@ public class ClientInterface {
 	
     }
     
+    public Connection getConnection()
+    {
+        return pool.getConnection(); 
+    }
+    
+    public void returnConnection(Connection conn)
+    {
+        pool.returnConnection(conn);
+    }
+    
     public Account getAccount(int id){
         if(!accMap.containsKey(id)) return null;
         return accMap.get(id);
@@ -148,7 +162,26 @@ public class ClientInterface {
     public double getDefaultScore(){
     	return default_score;
     }
-
+    
+    public double getDegreeOfStrictness()
+    {
+        return degree_of_strictness; 
+    }
+    
+    public double getBetaFactor()
+    {
+        return beta_factor; 
+    }
+    
+    public double getActiveUserTime()
+    {
+        return active_user_time;
+    }
+    
+    public double getActiveEvaluationTime()
+    {
+        return active_evaluation_time; 
+    }
     public void addScorerComponent(Component c){
     	scorer.compList.add(c);
     }
