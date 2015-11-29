@@ -53,8 +53,12 @@ public class Server {
 		int validation_time = rs.getInt(5);
 		double default_score = rs.getDouble(6);
 		double rating_scale = rs.getDouble(7); 
+                double degree_of_strictness = rs.getDouble(8);
+                double beta_factor = rs.getDouble(9);
+                double active_user_time = rs.getDouble(10);
+                double active_evaluation_time = rs.getDouble(11); 
 		
-		Configuration conf = new Configuration(client_name, validation_type, validation_time, default_score, rating_scale);
+		Configuration conf = new Configuration(client_name, validation_type, validation_time, default_score, rating_scale, degree_of_strictness, beta_factor, active_user_time, active_evaluation_time);
 		ClientInterface inf = new ClientInterface(client_key, conf, url, this ); 
 		clients.add(inf);
 		inf.loadDB(); 
