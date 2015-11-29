@@ -5,18 +5,18 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.HashMap;
 
-
-
 public class ClientInterface {
     private final String client_name, validation_type, key;
     private final int validation_time;
     private final double default_score, rating_scale, score_validity;
     final ConnectionPool pool;
     final ComponentFactory compFactory;
+    private Scorer scorer;
     private final Server server;
     private HashMap<Integer,Account> accMap;
     private HashMap<Integer,Contribution> contMap;
     private HashMap<Integer,Evaluation> evalMap;
+    private Validator valid;
     
     public ClientInterface(String key, Configuration config, String url, Server server){
         this.key = key;
@@ -33,6 +33,8 @@ public class ClientInterface {
         evalMap = new HashMap<Integer, Evaluation>();
         server.httpserver.createContext("/"+key,new ClientInterfaceHandler(this));
         compFactory = new ComponentFactory(pool.getConnection(),this);
+        scorer = new PageRankScorer(this);
+        // valid = new TestValidator(this);
     }
     
     public void loadDB()
@@ -103,14 +105,17 @@ public class ClientInterface {
     }
     
     public Account getAccount(int id){
+        if(!accMap.containsKey(id)) return null;
         return accMap.get(id);
     }
     
     public Contribution getContribution(int id){
+        if(!contMap.containsKey(id)) return null;
         return contMap.get(id);
     }
     
     public Evaluation getEvaluation(int id){
+        if(!evalMap.containsKey(id)) return null;
         return evalMap.get(id);
     }
     
@@ -124,5 +129,25 @@ public class ClientInterface {
     
     public void putEvaluation(int id, Evaluation ev){
         evalMap.put(id, ev);
+    }
+    
+    public void score(Evaluation ev, int ci){
+        scorer.calculateScore(ev, ci);
+    }
+
+    public double getRatingScale(){
+    	return rating_scale;
+    }
+
+    public double getScoreValidity(){
+    	return score_validity;
+    }
+
+    public double getDefaultScore(){
+    	return default_score;
+    }
+
+    public void addScorerComponent(Component c){
+    	scorer.compList.add(c);
     }
 }

@@ -19,7 +19,7 @@ public class ClientInterfaceHandler implements HttpHandler {
     
     public void handle(HttpExchange t) throws IOException {
         String req = t.getRequestMethod();
-        System.out.println("Method2: "+req);
+        System.out.println("Method: "+req);
         Scanner sc = new Scanner(t.getRequestBody());
         StringBuilder sb = new StringBuilder();
         while(sc.hasNextLine()) sb.append(sc.nextLine());
@@ -32,6 +32,6 @@ public class ClientInterfaceHandler implements HttpHandler {
         OutputStream os = t.getResponseBody();
         os.write(response.getBytes());
         os.close();
-        System.out.println(response);
+        System.out.println("Index: "+response);
     }
 }

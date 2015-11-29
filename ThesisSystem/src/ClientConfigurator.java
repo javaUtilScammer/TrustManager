@@ -31,18 +31,19 @@ public class ClientConfigurator implements HttpHandler {
     
     public Connection getConnection()
     {
-	return conn; 
+	   return conn; 
     }
     
     public void handle(HttpExchange t) throws IOException {
         String req = t.getRequestMethod();
-        System.out.println("Method1: "+req);
+        // System.out.println("Method: "+req);
+        System.out.println("Incoming create client request");
         Scanner sc = new Scanner(t.getRequestBody());
         StringBuilder sb = new StringBuilder();
         while(sc.hasNextLine()) sb.append(sc.nextLine());
         System.out.println(sb);
         Configuration config = new Gson().fromJson(sb.toString(),Configuration.class);
-//        System.out.println("test: "+config.getClientName());
+        // System.out.println("test: "+config.getClientName());
         DatabaseCreator dbc = new DatabaseCreator(config,conn);
         String key = dbc.createDatabase();
         ClientInterface clientInt = new ClientInterface(key,config,root+config.getClientName(),server);
@@ -53,6 +54,6 @@ public class ClientConfigurator implements HttpHandler {
         OutputStream os = t.getResponseBody();
         os.write(key.getBytes());
         os.close();
-        System.out.println(key);
+        System.out.println("Created client with key: "+key);
     }
 }

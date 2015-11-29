@@ -3,10 +3,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date.*;
 import java.sql.Timestamp; 
+import java.util.ArrayList;
 
-public class Account
+public class Account extends Component
 {
 	private int account_id;
+	ArrayList<Contribution> contributions;
 	private String username;
 	private Timestamp created_at, last_updated_at;
 	private double trust_rating, trust_validity;
@@ -19,6 +21,8 @@ public class Account
 		this.last_updated_at = last_updated_at; 
 		this.trust_rating = trust_rating;
 		this.trust_validity = trust_validity;
+		type = 'a';
+		contributions = new ArrayList<Contribution>();
 	}
 	
 	public boolean updateDB(Connection conn)
@@ -65,5 +69,14 @@ public class Account
 	public double getTrustValidity()
 	{
 		return trust_validity; 
+	}
+
+	public void setTrustRating(double tr, Connection conn){
+		trust_rating = tr;
+		updateDB(conn);
+	}
+
+	public void setTrustRating(double tr){
+		trust_rating = tr;
 	}
 }

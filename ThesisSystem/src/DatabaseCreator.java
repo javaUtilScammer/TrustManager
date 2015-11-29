@@ -31,17 +31,17 @@ public class DatabaseCreator {
     public String createDatabase()
     {
         try{
-            Statement st = conn.createStatement(); 
-            st.executeUpdate("CREATE DATABASE " + conf.getClientName()); 
-	    st = conn.createStatement();
-	    String sql = "INSERT INTO Clients(client_key, validation_time, default_score, rating_scale)"
-		    + "VALUES(\"" + key +"\", " + conf.getValidationTime() + ", " + conf.getDefaultScore() +", " + conf.getRatingScale() +");"; 
-	    st.executeUpdate(sql); 
-            return key; 
-        }catch(Exception e)
-        {
-	    e.printStackTrace(); 
-            return null; 
+			Statement st = conn.createStatement(); 
+			st.executeUpdate("CREATE DATABASE " + conf.getClientName()); 
+			st = conn.createStatement();
+			String sql = "INSERT INTO Clients(client_key, validation_time, default_score, rating_scale)"
+			+ "VALUES(\"" + key +"\", " + conf.getValidationTime() + ", " + conf.getDefaultScore() +", " + conf.getRatingScale() +");"; 
+			st.executeUpdate(sql);
+			return key; 
+        }
+        catch(Exception e){
+			e.printStackTrace();
+			return null; 
         }
     }
     
