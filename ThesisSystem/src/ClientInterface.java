@@ -52,9 +52,9 @@ public class ClientInterface {
 		Timestamp created_at = rs.getTimestamp(3);
 		Timestamp last_updated_at = rs.getTimestamp(4); 
 		double trust_rating = rs.getDouble(5);
-		double trust_validity = rs.getDouble(6);
+		double trust_confidence = rs.getDouble(6);
 		
-		Account acc = new Account(account_id, username, created_at, last_updated_at, trust_rating, trust_validity); 
+		Account acc = new Account(account_id, username, created_at, last_updated_at, trust_rating, trust_confidence); 
 		accMap.put(account_id, acc);
 	    }
 	    
@@ -67,13 +67,13 @@ public class ClientInterface {
 		int contributor_id = rs.getInt(2); 
 		Account acc = accMap.get(contributor_id); 
 		double contribution_score = rs.getDouble(3);
-		double score_validity = rs.getDouble(4);
+		double score_confidence = rs.getDouble(4);
 		Timestamp created_at = rs.getTimestamp(5);
 		int state = rs.getInt(6); 
 		if(state!=0) //If state == 0 validation_phase - should load it
 		    continue; 
 		
-		Contribution cont = new Contribution(contribution_id, acc, contribution_score, score_validity, created_at, state);
+		Contribution cont = new Contribution(contribution_id, acc, contribution_score, score_confidence, created_at, state);
 		contMap.put(contribution_id,cont);
 	    }
 	    
