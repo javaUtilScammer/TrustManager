@@ -15,6 +15,9 @@ public class AdHocValidator extends Validator {
         super(in); 
     }
     
-    
+    public boolean validate(Evaluation ev)
+    {
+        return true; 
+    }
     
 }

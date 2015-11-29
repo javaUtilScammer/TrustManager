@@ -16,9 +16,5 @@ public abstract class Validator {
         active_evaluation_time = intrface.getActiveEvaluationTime(); 
     }
 
-    public boolean validate(Evaluation ev, double newScore){
-    	double threshold = rating_scale/2;//temporary
-    	if(newScore<threshold) return false;
-    	return true;
-    }
+    public abstract boolean validate(Evaluation ev);
 }

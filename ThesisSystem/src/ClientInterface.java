@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.HashSet; 
 
 public class ClientInterface {
     private final String client_name, validation_type, key;
@@ -17,6 +18,7 @@ public class ClientInterface {
     private HashMap<Integer,Contribution> contMap;
     private HashMap<Integer,Evaluation> evalMap;
     private Validator valid;
+    private HashSet<Account> active; 
     
     public ClientInterface(String key, Configuration config, String url, Server server){
         this.key = key;
@@ -31,6 +33,7 @@ public class ClientInterface {
         active_evaluation_time = config.getActiveEvaluationTime(); 
         score_validity = default_score;
         rating_scale = config.getRatingScale();
+        active = new HashSet<Account>(); 
         this.server = server;
         accMap = new HashMap<Integer, Account>();
         contMap = new HashMap<Integer, Contribution>();
@@ -109,6 +112,26 @@ public class ClientInterface {
 	    e.printStackTrace(); 
 	}
 	
+    }
+    
+    public void computeActive()
+    {
+        active = new HashSet<Account>(); 
+        for(Integer key: accMap.keySet())
+        {
+            Account acc = accMap.get(key); 
+            Timestamp ts = acc.getUpdatedAt(); 
+            long hold = ts.getTime(); 
+            long currTime = System.currentTimeMillis(); 
+            double diff = currTime - hold; 
+            double check = diff / 3600000; 
+            if(check<=active_user_time) active.add(acc); 
+        }
+    }
+    
+    public int getActiveCount()
+    {
+        return active.size(); 
     }
     
     public Connection getConnection()

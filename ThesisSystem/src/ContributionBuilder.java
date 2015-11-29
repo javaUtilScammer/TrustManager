@@ -32,6 +32,7 @@ public class ContributionBuilder extends ComponentBuilder
 	    
 	    Contribution temp = new Contribution(contribution_id, contributor, contribution_score, score_confidence, created_at, state);
 	    contributor.getContributions().add(temp);
+            contributor.setLastUpdatedAt(created_at,conn); 
 	    return temp; 
 	    
 	}catch(Exception e)

@@ -92,6 +92,12 @@ public class Account extends Component
             trust_confidence = tr;
             updateDB(conn);
 	}
+        
+        public void setLastUpdatedAt(Timestamp ts, Connection conn)
+        {
+            last_updated_at = ts; 
+            updateDB(conn); 
+        }
 
 	public void setTrustRating(double tr){
             trust_rating = tr;
