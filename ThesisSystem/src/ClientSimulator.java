@@ -1,9 +1,7 @@
 import com.google.gson.Gson;
 import java.io.*;
 import java.net.*;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -28,13 +26,21 @@ public class ClientSimulator extends JFrame {
         JTextField time = new JTextField("10");
         JTextField score = new JTextField("2.5");
         JTextField scale = new JTextField("5");
+        JTextField deg = new JTextField("1.0");
+        JTextField beta = new JTextField("1.0");
+        JTextField user_time = new JTextField("1.0");
+        JTextField eval_time = new JTextField("1.0");
         Object[] message = {
             "Server URL", server,
             "Client Name", client,
             "Validation Type", validator,
             "Validation Time", time,
             "Default Score", score,
-            "Rating Scale", scale
+            "Rating Scale", scale,
+            "Degree of Strictness", deg,
+            "Beta Factor", beta,
+            "Active User Time", user_time,
+            "Active Evaluation Time", eval_time
         };
         int option = JOptionPane.showConfirmDialog(null, message, "Client Simulator", JOptionPane.OK_CANCEL_OPTION);
         if (option != JOptionPane.OK_OPTION) {
@@ -43,7 +49,9 @@ public class ClientSimulator extends JFrame {
         serverURL = server.getText();
         obj = new URL(serverURL);
         clientName = client.getText();
-        config = new Configuration(client.getText(), validator.getText(), Integer.parseInt(time.getText()), Double.parseDouble(score.getText()), Integer.parseInt(scale.getText()));
+        config = new Configuration(client.getText(), validator.getText(), Integer.parseInt(time.getText()), 
+            Double.parseDouble(score.getText()), Integer.parseInt(scale.getText()), Double.parseDouble(deg.getText()),
+            Double.parseDouble(beta.getText()), Double.parseDouble(user_time.getText()), Double.parseDouble(eval_time.getText()));
         postURL = postConfig();
         objPost = new URL("http://localhost:8000/"+postURL);
         gson = new Gson();

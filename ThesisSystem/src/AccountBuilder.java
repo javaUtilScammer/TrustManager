@@ -19,7 +19,7 @@ public class AccountBuilder extends ComponentBuilder
     {
 	try{
 	    Statement st = conn.createStatement(); 
-	    String sql = "INSERT INTO Accounts(username, created_at, last_updated_at, trust_rating, trust_confidence, contributions_accepted, contributions_rejected, contributons_total)"
+	    String sql = "INSERT INTO Accounts(username, created_at, last_updated_at, trust_rating, trust_confidence, contributions_accepted, contributions_rejected, contributions_total)"
 		    + "VALUES(\"" + username + "\", \"" + created_at + "\", \"" + last_updated_at + "\", " + trust_rating + ", " + trust_confidence + ", " + cacc + ", " + crej + ", " + ctotal + ");";
 	    st.executeUpdate(sql); 
 	    

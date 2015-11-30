@@ -21,7 +21,10 @@ public abstract class Scorer {
             active_evaluation_time = intrface.getActiveEvaluationTime(); 
     }
 
-    abstract void calculateScore();
+    public void addComponent(Component c){
+        compList.add(c);
+    }
+
     abstract void calculateScore(Evaluation ev, Contribution cont);
         
 }

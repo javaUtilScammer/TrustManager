@@ -37,12 +37,11 @@ public class Contribution extends Component
 	    }
 	}
 	
-        public ArrayList<Evaluation> getEvaluations()
-        {
-            return evaluations; 
-        }
-        
-        
+    public ArrayList<Evaluation> getEvaluations()
+    {
+        return evaluations; 
+    }
+
 	public int getId()
 	{
             return contribution_id; 
@@ -81,4 +80,5 @@ public class Contribution extends Component
 	public void setContributionScore(double cs){
 		contribution_score = cs;
 	}
+
 }

@@ -34,9 +34,10 @@ public class DatabaseCreator {
 			Statement st = conn.createStatement(); 
 			st.executeUpdate("CREATE DATABASE " + conf.getClientName()); 
 			st = conn.createStatement();
-			String sql = "INSERT INTO Clients(client_key, validation_time, default_score, rating_scale, degree_of_strictness, beta_factor, active_user_time, active_evaluation_time)"
-			+ "VALUES(\"" + key +"\", " + conf.getValidationTime() + ", " + conf.getDefaultScore() +", " + conf.getRatingScale() +", " + conf.getDegreeOfStrictness() + ", " + conf.getBetaFactor() + ", " + conf.getActiveUserTime() + ", " + conf.getActiveEvaluationTime() +");"; 
-			st.executeUpdate(sql);
+			String sql = "INSERT INTO Clients(client_key, client_name, validation_time, validation_type, default_score, rating_scale, degree_of_strictness, beta_factor, active_user_time, active_evaluation_time)"
+			+ "VALUES(\"" + key +"\", \"" + conf.getClientName()+"\", "+conf.getValidationTime() +", \""+conf.getValidationType()+"\", "+ conf.getDefaultScore()+", " + conf.getRatingScale() +", " + conf.getDegreeOfStrictness() + ", " + conf.getBetaFactor() + ", " + conf.getActiveUserTime() + ", " + conf.getActiveEvaluationTime() +");"; 
+			// System.out.println(sql);
+            st.executeUpdate(sql);
 			return key; 
         }
         catch(Exception e){
