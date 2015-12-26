@@ -12,7 +12,7 @@ CREATE TABLE Clients(
 	degree_of_strictness double NOT NULL, 
 	beta_factor double NOT NULL, 
 	active_user_time double NOT NULL,
-	active_evaluation_time double NOT NULL
+	active_evaluation_time double NOT NULL,
 
 	PRIMARY KEY(client_id)
 );
