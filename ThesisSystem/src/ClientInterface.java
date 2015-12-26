@@ -41,6 +41,7 @@ public class ClientInterface {
         server.httpserver.createContext("/"+key,new ClientInterfaceHandler(this));
         compFactory = new ComponentFactory(pool.getConnection(),this);
         scorer = new PageRankScorer(this);
+        computeActive();
         // valid = new TestValidator(this);
     }
     
@@ -212,6 +213,6 @@ public class ClientInterface {
         return active_evaluation_time; 
     }
     public void addScorerComponent(Component c){
-    	scorer.compList.add(c);
+    	scorer.addComponent(c);
     }
 }

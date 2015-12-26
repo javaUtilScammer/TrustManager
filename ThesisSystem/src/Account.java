@@ -8,12 +8,12 @@ import java.util.ArrayList;
 public class Account extends Component
 {
 	private int account_id, num_ev;
-	ArrayList<Contribution> contributions;
-        ArrayList<Evaluation> evaluations; 
+	private ArrayList<Contribution> contributions;
+    private ArrayList<Evaluation> evaluations; 
 	private String username;
 	private Timestamp created_at, last_updated_at;
 	private double trust_rating, trust_confidence;
-        private double cacc, crej, ctotal; 
+    private double cacc, crej, ctotal; 
 
 	public Account(int account_id, String username, Timestamp created_at, Timestamp last_updated_at, double trust_rating, double trust_confidence, double cacc, double crej, double ctotal)
 	{
@@ -48,49 +48,49 @@ public class Account extends Component
 	    }
 	}
         
-        public void addEv()
-        {
-            num_ev++; 
-        }
+    public void addEv()
+    {
+        num_ev++; 
+    }
+    
+    public int getNumEv()
+    {
+        return num_ev; 
+    }
+    
+    public double getAccepted()
+    {
+        return cacc;
+    }
+    
+    public double getRejected()
+    {
+        return crej;
+    }
+    
+    public double getTotal()
+    {
+        return ctotal; 
+    }
+    
+    public void setAccepted(double temp)
+    {
+        cacc += temp;
+        //updateDB(conn);
         
-        public int getNumEv()
-        {
-            return num_ev; 
-        }
+    }
+    public void setRejected(double temp)
+    {
+        crej += temp;
+        //updateDB(conn);
         
-        public double getAccepted()
-        {
-            return cacc;
-        }
+    }
+    public void setTotal(double temp)
+    {
+        ctotal += temp;
+        //updateDB(conn);
         
-        public double getRejected()
-        {
-            return crej;
-        }
-        
-        public double getTotal()
-        {
-            return ctotal; 
-        }
-        
-        public void setAccepted(double temp)
-        {
-            cacc += temp;
-            //updateDB(conn);
-            
-        }
-        public void setRejected(double temp)
-        {
-            crej += temp;
-            //updateDB(conn);
-            
-        }
-        public void setTotal(double temp)
-        {
-            ctotal += temp;
-            //updateDB(conn);
-            
-        }
+    }
         
 	public int getId()
 	{
@@ -122,15 +122,15 @@ public class Account extends Component
 		return trust_confidence; 
 	}
         
-        public ArrayList<Evaluation> getEvaluations()
-        {
-            return evaluations; 
-        }
-        
-        public ArrayList<Contribution> getContributions()
-        {
-            return contributions; 
-        }
+    public ArrayList<Evaluation> getEvaluations()
+    {
+        return evaluations; 
+    }
+    
+    public ArrayList<Contribution> getContributions()
+    {
+        return contributions; 
+    }
         
 	public void setTrustRating(double tr, Connection conn){
             trust_rating = tr;
@@ -142,11 +142,11 @@ public class Account extends Component
             updateDB(conn);
 	}
         
-        public void setLastUpdatedAt(Timestamp ts, Connection conn)
-        {
-            last_updated_at = ts; 
-            updateDB(conn); 
-        }
+    public void setLastUpdatedAt(Timestamp ts, Connection conn)
+    {
+        last_updated_at = ts; 
+        updateDB(conn); 
+    }
 
 	public void setTrustRating(double tr){
             trust_rating = tr;

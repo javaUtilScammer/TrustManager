@@ -22,8 +22,8 @@ public class Configuration {
     	this.rating_scale = rating_scale; 
         this.degree_of_strictness = degree_of_strictness;
         this.beta_factor = beta_factor;
-        this.active_evaluation_time = active_evaluation_time; 
         this.active_user_time = active_user_time; 
+        this.active_evaluation_time = active_evaluation_time; 
     }
     
     public String getClientName()
