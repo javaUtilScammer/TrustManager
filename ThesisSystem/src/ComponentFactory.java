@@ -40,7 +40,7 @@ public class ComponentFactory {
             Timestamp last_updated_at = new Timestamp(System.currentTimeMillis());;
             double trust_rating = default_score;
             double trust_validity = default_score;
-            Account ac = ab.buildAccount(username, created_at, last_updated_at, trust_rating, trust_validity,0,0,0);
+            Account ac = ab.buildAccount(username, created_at, trust_rating, trust_validity,0,0,0);
             // System.out.println("Account "+ac.getTrustRating());
             intrface.putAccount(ac.getId(), ac);
             intrface.addScorerComponent(ac);
@@ -71,7 +71,6 @@ public class ComponentFactory {
             Double rating = (double)map.get("rating");
             Timestamp created_at = new Timestamp(System.currentTimeMillis());;
             Evaluation ev = eb.buildEvaluation(rating, created_at, contributor, cont);
-            cont.getEvaluations().add(ev);
             // System.out.println("Evaluation "+ev.type);
             intrface.putEvaluation(ev.getId(), ev);
             intrface.addScorerComponent(ev);

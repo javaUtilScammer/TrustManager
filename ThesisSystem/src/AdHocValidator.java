@@ -5,18 +5,27 @@
  */
 
 /**
- *
+ *Separate Validator class to recompute threshold and check whether or not a Contribution has reached this threshold
  * @author hadrianang
  */
 import java.sql.Connection;
 import java.util.*;
 public class AdHocValidator extends Validator {
     
+    /**
+     * Constructor simply calls on superclass constructor
+     * @param in ClientInterface necessary for Validator to work passed on to superclass
+     */
     public AdHocValidator(ClientInterface in)
     {
         super(in); 
     }
     
+    /**
+     * Validate method recomputes threshold of Contribution pointed to by Evaluation passed on to it. 
+     * @param ev new Evaluation that was just used to compute the new score of a Contribution
+     * @return whether or not Contribution has reached the threshold necessary for integration
+     */
     public boolean validate(Evaluation ev)
     {
         Contribution cont = ev.getContribution();
@@ -53,16 +62,16 @@ public class AdHocValidator extends Validator {
                 double total = sub.getTotal(); 
                 
                 if(scaled>=0)
-                    sub.setAccepted(acc+(scaled*0.50));
+                    sub.incAccepted(acc+(scaled*0.50));
                 else
-                    sub.setRejected(rej+(scaled*0.50)); 
-                sub.setTotal(total+0.50); 
+                    sub.incRejected(rej+(scaled*0.50)); 
+                sub.incTotal(total+0.50); 
                 sub.updateDB(conn); 
             }
             
             Account user = ev.getCreatedBy();
-            user.setAccepted(user.getAccepted()+1); 
-            user.setTotal(user.getTotal()+1);
+            user.incAccepted(user.getAccepted()+1); 
+            user.incTotal(user.getTotal()+1);
             user.updateDB(conn);
             intrface.returnConnection(conn);
             return true; 

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 /**
- *
+ * Configuration class with getter and setter methods 
  * @author Hadrian
  */
 public class Configuration {
@@ -13,6 +13,18 @@ public class Configuration {
     private String client_name, validation_type;
     private double default_score, rating_scale, degree_of_strictness, beta_factor, active_user_time, active_evaluation_time; 
 
+    /**
+     * 
+     * @param client_name name of client system
+     * @param validation_type validation and scorer method to be used
+     * @param validation_time time before a Contribution expires and is rejected
+     * @param default_score default trust rating of a user
+     * @param rating_scale scale of the rating (1 or 0, 0-5) 
+     * @param degree_of_strictness variable for how strict thresholds must be
+     * @param beta_factor factor used in score computations
+     * @param active_user_time time since last update for a user to still be considered an active user 
+     * @param active_evaluation_time time before effects of an evaluation of score decays 
+     */
     public Configuration(String client_name, String validation_type, int validation_time, double default_score, double rating_scale, double degree_of_strictness, double beta_factor, double active_user_time, double active_evaluation_time)
     {
         this.client_name = client_name;

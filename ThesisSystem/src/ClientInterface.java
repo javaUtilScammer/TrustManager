@@ -65,7 +65,7 @@ public class ClientInterface {
                 double crej = rs.getDouble(7);
                 double ctotal = rs.getDouble(7);
 		
-		Account acc = new Account(account_id, username, created_at, last_updated_at, trust_rating, trust_confidence,cacc,crej,ctotal); 
+		Account acc = new Account(account_id, username, created_at, trust_rating, trust_confidence,cacc,crej,ctotal); 
 		accMap.put(account_id, acc);
 	    }
 	    
