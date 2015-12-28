@@ -38,46 +38,83 @@ public class Configuration {
         this.active_evaluation_time = active_evaluation_time; 
     }
     
+    /**
+     * gets name of client system that owns the configuration
+     * @return name of client system
+     */
     public String getClientName()
     {
 	   return client_name; 
     }
     
+    /**
+     * gets kind of validation method used by client system
+     * @return name of validation method used
+     */
     public String getValidationType()
     {
 	   return validation_type; 
     }
     
+    /**
+     * gets length of validation time in hours
+     * @return validation time in number of hours
+     */
     public int getValidationTime()
     {
 	   return validation_time; 
     }
     
+    /**
+     * gets default score of newly created Accounts
+     * @return default score of newly created Accounts
+     */
     public double getDefaultScore()
     {
 	   return default_score; 
     }
     
+    /**
+     * gets scale of ratings used by validation methods
+     * @return maximum possible rating (0 as the assumed minimum)
+     */
     public double getRatingScale()
     {
 	   return rating_scale; 
     }
     
+    /**
+     * gets degree of strictness used in calculation of scores and thresholds
+     * @return degree of strictness
+     */
     public double getDegreeOfStrictness()
     {
         return degree_of_strictness;
     }
     
+    /**
+     * gets beta factor used in calculation of scores and thresholds
+     * @return beta factor
+     */
     public double getBetaFactor()
     {
         return beta_factor; 
     }
     
+    
+    /**
+     * gets time since last update for a user to be considered active 
+     * @return time since last update for a user to be considered active
+     */
     public double getActiveUserTime()
     {
         return active_user_time; 
     }
     
+    /**
+     * gets time before an Evaluation's effects decay
+     * @return time before an Evaluation's effects decay
+     */
     public double getActiveEvaluationTime()
     {
         return active_evaluation_time; 
