@@ -1,10 +1,5 @@
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.HashSet; 
+import java.sql.*;
+import java.util.*;
 
 public class ClientInterface {
     private final String client_name, validation_type, key;
@@ -20,6 +15,9 @@ public class ClientInterface {
     private Validator valid;
     private HashSet<Account> active; 
     
+    /*
+        ClientInterface objects are created by the server
+    */
     public ClientInterface(String key, Configuration config, String url, Server server){
         this.key = key;
         pool = new ConnectionPool(url,server.getUsername(),server.getPassword());
@@ -40,7 +38,8 @@ public class ClientInterface {
         evalMap = new HashMap<Integer, Evaluation>();
         server.httpserver.createContext("/"+key,new ClientInterfaceHandler(this));
         compFactory = new ComponentFactory(pool.getConnection(),this);
-        scorer = new PageRankScorer(this);
+        if(validation_type.equalsIgnoreCase("ad hoc"))scorer = new AdHocScorer(this);
+        else if(validation_type.equalsIgnoreCase("pagerank"))scorer = new PageRankScorer(this);
         computeActive();
         // valid = new TestValidator(this);
     }
@@ -212,7 +211,32 @@ public class ClientInterface {
     {
         return active_evaluation_time; 
     }
+    
     public void addScorerComponent(Component c){
     	scorer.addComponent(c);
+    }
+    
+    public void acceptContribution(int n){
+        //scorer.acceptContribution(n);
+        //make scorer remove contribution and evaluations
+        Contribution cont = contMap.get(n);
+        ArrayList<Evaluation> evals = cont.getEvaluations();
+        for(int i=0; i<evals.size(); i++){
+            Evaluation ev = evals.get(i);
+            int id = ev.getId();
+            evalMap.remove(id);
+        }
+        contMap.remove(cont.getId());
+    }
+
+    public String getTopContributions(int n){
+        ArrayList<Contribution> list = new ArrayList<Contribution>();
+        Iterator<Integer> iter = contMap.keySet().iterator();
+        while(iter.hasNext()){
+            int id = iter.next();
+            list.add(contMap.get(id));
+        }
+        Collections.sort(list);
+        return "";
     }
 }

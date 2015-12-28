@@ -24,7 +24,17 @@ public class ClientInterfaceHandler implements HttpHandler {
         StringBuilder sb = new StringBuilder();
         while(sc.hasNextLine()) sb.append(sc.nextLine());
         System.out.println(sb);
+        String[] tokens = sb.toString().split(" ");
         int resp = intrface.compFactory.create(sb.toString());
+        // if(tokens[0].equals("create")){
+        //     int resp = intrface.compFactory.create(sb.toString());
+        // }
+        // else if(tokens[0].equals("accept")){
+                // intrface.acceptContribution(Integer.parseInt(tokens[1]));
+        // }
+        // else if(tokens[0].equals("get")){
+                // intrface.getTopContibutions(Integer.parseInt(tokens[1]));
+        // }
         String response = "";
         if(resp==-1) response = "ERROR";
         else response = resp+"";
@@ -32,6 +42,6 @@ public class ClientInterfaceHandler implements HttpHandler {
         OutputStream os = t.getResponseBody();
         os.write(response.getBytes());
         os.close();
-        System.out.println("Index: "+response);
+        // System.out.println("Index: "+response);
     }
 }

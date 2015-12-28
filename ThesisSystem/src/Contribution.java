@@ -2,7 +2,7 @@ import java.util.Date.*;
 import java.sql.*; 
 import java.util.ArrayList;
 
-public class Contribution extends Component
+public class Contribution extends Component implements Comparable<Contribution>
 {
 	private int contribution_id, state;
 	private ArrayList<Evaluation> evaluations;
@@ -57,10 +57,10 @@ public class Contribution extends Component
             return contribution_score;
 	}
         
-        public double getScoreConfidence()
-        {
-            return score_confidence; 
-        }
+    public double getScoreConfidence()
+    {
+        return score_confidence; 
+    }
 
 	public double getLat()
 	{
@@ -81,4 +81,7 @@ public class Contribution extends Component
 		contribution_score = cs;
 	}
 
+	public int compareTo(Contribution c){
+		return Double.compare(contribution_score,c.getContributionScore());
+	}
 }
