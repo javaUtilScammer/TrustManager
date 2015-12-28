@@ -22,7 +22,7 @@ public class ClientSimulator extends JFrame {
     public ClientSimulator() throws IOException {
         JTextField server = new JTextField("http://localhost:8000/create");
         JTextField client = new JTextField("testClient");
-        JTextField validator = new JTextField("testValidation");
+        JTextField validator = new JTextField("pagerank");
         JTextField time = new JTextField("10");
         JTextField score = new JTextField("2.5");
         JTextField scale = new JTextField("5");

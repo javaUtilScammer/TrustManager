@@ -2,11 +2,12 @@ import java.util.Date.*;
 import java.sql.*; 
 import java.util.ArrayList;
 
+
 /**
  * Contribution class to hold all information with regard to Contributions
  * @author hadrianang
  */
-public class Contribution extends Component
+public class Contribution extends Component implements Comparable<Contribution>
 {
     private int contribution_id, state;
     private ArrayList<Evaluation> evaluations;
@@ -48,6 +49,7 @@ public class Contribution extends Component
                     + "SET contribution_score = " + contribution_score + ", score_confidence = " + score_confidence + ", state = " + state  
                     + "WHERE contribution_id = " + contribution_id; 
 
+
             return true; 
         }catch(SQLException e)
         {
@@ -55,7 +57,7 @@ public class Contribution extends Component
             return false; 
         }
     }
-	
+
     /**
      * gets list of Evaluations rating this Contribution
      * @return list of evaluations rating this Contribution
@@ -116,5 +118,9 @@ public class Contribution extends Component
      */
     public void setContributionScore(double cs){
             contribution_score = cs;
+            
+    }
+    public int compareTo(Contribution c){
+            return Double.compare(contribution_score,c.getContributionScore());
     }
 }
