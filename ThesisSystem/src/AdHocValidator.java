@@ -35,6 +35,7 @@ public class AdHocValidator extends Validator {
         denom = Math.pow(denom,degree_of_strictness);
         double threshold = active/denom; 
         
+        //If accepted, modify the scores of Evaluators that Evaluated this accepted function
         if(score>=threshold)
         {
             Connection conn = intrface.getConnection(); 
@@ -61,14 +62,18 @@ public class AdHocValidator extends Validator {
                 double rej = sub.getRejected();
                 double total = sub.getTotal(); 
                 
+                //increment number of Accepted or Rejected and Total number of Contributions by half a point
                 if(scaled>=0)
                     sub.incAccepted(acc+(scaled*0.50));
                 else
                     sub.incRejected(rej+(scaled*0.50)); 
                 sub.incTotal(total+0.50); 
+                
+                //update the database
                 sub.updateDB(conn); 
             }
             
+            //Contributor gets trust rating score modified also
             Account user = ev.getCreatedBy();
             user.incAccepted(user.getAccepted()+1); 
             user.incTotal(user.getTotal()+1);
