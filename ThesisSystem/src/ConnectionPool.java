@@ -11,14 +11,19 @@ import java.util.ArrayDeque;
  */
 
 /**
- *
- * @author Migee
+ *  The ConnectionPool simply pre initializes and stores the Connection objects for later use.
+ *  @author Migee
  */
 public class ConnectionPool {
     String url;
     ArrayDeque<Connection> pool;
     final int capacity = 50;
     
+    /*
+        @param url the url of the database
+        @param user the username for the mysql account in the server machine
+        @param pass the password for the mysql account in the server machine
+    */
     public ConnectionPool(String url,String user, String pass){
         this.url = url;
         pool = new ArrayDeque<Connection>();
@@ -28,6 +33,9 @@ public class ConnectionPool {
         catch(Exception e){ e.printStackTrace();}
     }
     
+    /*
+        @return a Connection object from the pool
+    */
     public Connection getConnection(){
         Connection ret = null;
         if(pool.size()!= 0) ret = pool.poll();
@@ -40,6 +48,9 @@ public class ConnectionPool {
         return ret;
     }
     
+    /*
+        @param con the Connection object to be returned to the pool
+    */
     public void returnConnection(Connection con){
         pool.offer(con);
     }

@@ -1,4 +1,3 @@
-
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import java.io.IOException;
@@ -6,7 +5,7 @@ import java.io.OutputStream;
 import java.util.Scanner;
 
 /**
- *
+ * The ClientInterfaceHandler receives HTTP Posts from clients and parses their requests. It then calls the appropriate method in the ClientInterface.
  * @author Migee
  */
 public class ClientInterfaceHandler implements HttpHandler {

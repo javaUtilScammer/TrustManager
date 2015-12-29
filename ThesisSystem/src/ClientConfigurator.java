@@ -10,8 +10,9 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
- *
- * @author Migee
+ *  ClientConfigurator is the class that handles client creation requests for the server.
+ *  It is created by the server and is bound to localhost:8000/create
+ *  @author Migee
  */
 public class ClientConfigurator implements HttpHandler {
     
@@ -21,6 +22,11 @@ public class ClientConfigurator implements HttpHandler {
     private String root = "jdbc:mysql://localhost/";
     private String url = "jdbc:mysql://localhost/clientservers";
     
+    /*
+        @param server a reference to the server object
+        @param username the username string for the mysql account on the machine
+        @param password the password string for the mysql account on the machine
+    */
     public ClientConfigurator(Server server, String username, String password){
         this.server = server;
         gson = new Gson();
@@ -29,11 +35,17 @@ public class ClientConfigurator implements HttpHandler {
         } catch (SQLException e) { e.printStackTrace();}
     }
     
+    /*
+        @return returns the Connection object used by the ClientConfigurator
+    */
     public Connection getConnection()
     {
 	   return conn; 
     }
     
+    /*
+        Handles the requests sent by HTTP Post.
+    */
     public void handle(HttpExchange t) throws IOException {
         String req = t.getRequestMethod();
         // System.out.println("Method: "+req);

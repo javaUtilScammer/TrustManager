@@ -1,6 +1,9 @@
 import java.sql.*;
 import java.util.*;
-
+/**
+ * ClientInterface objects are in charge of handling the interactions between the server and the clients.
+ * @author Migee
+*/
 public class ClientInterface {
     private final String client_name, validation_type, key;
     private final int validation_time;
@@ -16,7 +19,11 @@ public class ClientInterface {
     private HashSet<Account> active; 
     
     /*
-        ClientInterface objects are created by the server
+        ClientInterface objects are created by the server; do not instantiate these manually!
+        @param key randomized string created by server for the client
+        @param config Configuration object containing the settings for the interface
+        @param url the 
+        @param server a reference to the server object
     */
     public ClientInterface(String key, Configuration config, String url, Server server){
         this.key = key;
@@ -44,6 +51,9 @@ public class ClientInterface {
         // valid = new TestValidator(this);
     }
     
+    /*
+        The loadDB method loads all objects into memory from the DB in case of a server restart.
+    */
     public void loadDB()
     {
 	Connection conn = pool.getConnection(); 
@@ -117,6 +127,9 @@ public class ClientInterface {
 	
     }
     
+    /*
+        The computeActive method is used for the ad hoc method. It shows the percentage of users that have been actively recently.
+    */
     public void computeActive()
     {
         active = new HashSet<Account>(); 
@@ -132,21 +145,33 @@ public class ClientInterface {
         }
     }
     
+    /*
+
+    */
     public int getActiveCount()
     {
         return active.size(); 
     }
     
+    /*
+        Returns a Connection object from the connetion pool.
+    */
     public Connection getConnection()
     {
         return pool.getConnection(); 
     }
     
+    /*
+        Method used to return a connection object to the connection pool.
+    */
     public void returnConnection(Connection conn)
     {
         pool.returnConnection(conn);
     }
     
+    /*
+
+    */
     public Account getAccount(int id){
         if(!accMap.containsKey(id)) return null;
         return accMap.get(id);

@@ -1,7 +1,3 @@
-/*
-* Server program for Trust Manager
-*/
-
 import com.sun.net.httpserver.*;
 import java.io.*;
 import java.net.*;
@@ -9,6 +5,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.*;
+
+/*
+*   Server program for Trust Manager.
+*   Start this program first.
+*   @author Migee
+*/
 
 public class Server {
     
@@ -18,10 +20,16 @@ public class Server {
     private String url = "jdbc:mysql://localhost/clientservers";
     ClientConfigurator config;
     
+    /*
+        Calls the constructor with a default username and password combination ("root", "root").
+    */
     public static void main(String[] args) throws Exception {
         new Server("root", "root");
     }
     
+    /*
+        
+    */
     public Server(String user, String pass){
         clients = new ArrayList<ClientInterface>();
         username = user;
@@ -38,6 +46,9 @@ public class Server {
         System.out.println("Server started");
     }
     
+    /*
+        The reloadDB method reloads the client information into memory in case of a server reboot.
+    */
     public void reloadDB()
     {
 	try{
@@ -70,6 +81,9 @@ public class Server {
 	
     }
     
+    /*
+        
+    */
     public void integrateClientInterface(ClientInterface cf){
         clients.add(cf);
     }
