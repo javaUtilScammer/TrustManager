@@ -18,7 +18,12 @@ public class PageRankScorer extends Scorer{
     public void addComponent(Component c){
     	if(c instanceof Account) accList.add((Account) c);
     	else if(c instanceof Contribution) conList.add((Contribution) c);
-    	else if(c instanceof Evaluation) evaList.add((Evaluation) c);
+    	else if(c instanceof Evaluation){
+            Evaluation ev = (Evaluation) c;
+            Contribution co = (Contribution) ev.getContribution();
+            evaList.add(ev);
+            calculateScore(ev, co);
+        }
     }
 
     public void calculateScore(Evaluation ev, Contribution cont){
@@ -37,11 +42,11 @@ public class PageRankScorer extends Scorer{
     			M[i][ind] = (rating/n);
     		}
     	}
-    	System.out.println("PAGERANK");
-    	System.out.println(Nc+" "+Na);
-    	for(int i=0; i<Nc; i++) System.out.println(Arrays.toString(M[i]));
+    	// System.out.println("PAGERANK");
+    	// System.out.println(Nc+" "+Na);
+    	// for(int i=0; i<Nc; i++) System.out.println(Arrays.toString(M[i]));
 
-    	System.out.println();
+    	// System.out.println();
     	double[][] T = new double[Na][Na];
     	for(int i=0; i<Na; i++){
     		Account acc = accList.get(i);
@@ -55,12 +60,12 @@ public class PageRankScorer extends Scorer{
     		}
     		if(n!=0) for(int o=0; o<Na; o++) T[i][o]/=n;
     	}
-    	for(int i=0; i<Na; i++) System.out.println(Arrays.toString(T[i]));
+    	// for(int i=0; i<Na; i++) System.out.println(Arrays.toString(T[i]));
     	double[] vec = new double[Na];
     	for(int i=0; i<Na; i++) vec[i] = accList.get(i).getTrustRating();
     	for(int i=0; i<30; i++){
     		double[] vec2 = matrixMult(T,vec);
-    		System.out.println(i+" "+Arrays.toString(vec2));
+    		// System.out.println(i+" "+Arrays.toString(vec2));
     		vec = vec2;	
     	}
     	for(int i=0; i<Na; i++){

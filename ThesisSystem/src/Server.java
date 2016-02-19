@@ -28,7 +28,7 @@ public class Server {
     }
     
     /*
-        
+        @param user the username 
     */
     public Server(String user, String pass){
         clients = new ArrayList<ClientInterface>();
@@ -70,7 +70,7 @@ public class Server {
                 double active_evaluation_time = rs.getDouble(11); 
 		
 		Configuration conf = new Configuration(client_name, validation_type, validation_time, default_score, rating_scale, degree_of_strictness, beta_factor, active_user_time, active_evaluation_time);
-		ClientInterface inf = new ClientInterface(client_key, conf, url, this ); 
+		ClientInterface inf = new ClientInterface(client_key, conf, url, this, false); 
 		clients.add(inf);
 		inf.loadDB(); 
 	    }
@@ -82,16 +82,22 @@ public class Server {
     }
     
     /*
-        
+        @param cf adds this ClientInterface object to the server
     */
     public void integrateClientInterface(ClientInterface cf){
         clients.add(cf);
     }
     
+    /*
+        @return the username for the mysql account in the server machine
+    */
     public String getUsername(){
         return username;
     }
     
+    /*
+        @return the username for the mysql account in the server machine
+    */
     public String getPassword(){
         return password;
     }

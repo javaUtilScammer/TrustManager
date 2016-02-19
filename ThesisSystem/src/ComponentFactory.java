@@ -16,14 +16,16 @@ public class ComponentFactory {
     private EvaluationBuilder eb;
     ClientInterface intrface;
     private double default_score;
+    private boolean intervalCheck; //if false, will create new timertask for each contribution
     
-    public ComponentFactory(Connection con, ClientInterface ci){
+    public ComponentFactory(Connection con, ClientInterface ci, boolean ic){
         conn = con;
         intrface = ci;
         default_score = intrface.getDefaultScore();
         ab = new AccountBuilder();
         cb = new ContributionBuilder();
         eb = new EvaluationBuilder();
+        intervalCheck = ic;
     }
     
     public int create(String json){
@@ -33,7 +35,7 @@ public class ComponentFactory {
         String type = (String) map.get("type");
         System.out.println("type: "+type);
         int ret = -1;
-        if(type.equals("account")){
+        if(type.equalsIgnoreCase("account")){
             ab.setConnection(conn);
             String username = (String) map.get("username");
             Timestamp created_at = new Timestamp(System.currentTimeMillis());;
@@ -47,13 +49,13 @@ public class ComponentFactory {
             ab.releaseConnection();
             ret = ac.getId();
         }
-        else if(type.equals("contribution")){
+        else if(type.equalsIgnoreCase("contribution")){
             cb.setConnection(conn);
             int id = (int) ((double) map.get("account_id"));
             Account contributor = intrface.getAccount(id);
             double contribution_score = contributor.getTrustRating();
             double score_validity = (double) map.get("score_validity");
-            Timestamp created_at = new Timestamp(System.currentTimeMillis());;
+            Timestamp created_at = new Timestamp(System.currentTimeMillis());
             int state = (int) ((double) map.get("state"));
             Contribution co = cb.buildContribution(contributor,contribution_score, score_validity, created_at, state);
             // System.out.println("Contribution "+co.getContributionScore());
@@ -61,8 +63,9 @@ public class ComponentFactory {
             intrface.addScorerComponent(co);
             cb.releaseConnection();
             ret = co.getId();
+            if(!intervalCheck) intrface.addTimerTask(ret);
         }
-        else if(type.equals("evaluation")){
+        else if(type.equalsIgnoreCase("evaluation")){
             eb.setConnection(conn);
             int accId = (int)((double) map.get("account_id"));
             int conId = (int)((double) map.get("contribution_id"));
