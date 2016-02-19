@@ -1,0 +1,14 @@
+http://localhost:8000/create
+testClient
+pagerank
+10
+2.5
+5
+1.0
+1.0
+1.0
+1.0
+***end of config***
+2
+Account 5
+Account 3

@@ -7,7 +7,8 @@ import java.util.*;
 public class ClientInterface {
     private final String client_name, validation_type, key;
     private final int validation_time;
-    private final double default_score, rating_scale, score_validity, degree_of_strictness, beta_factor, active_user_time, active_evaluation_time;
+    private final double default_score, rating_scale, score_validity, degree_of_strictness, beta_factor, active_user_time, 
+        active_evaluation_time;
     final ConnectionPool pool;
     final ComponentFactory compFactory;
     private Scorer scorer;
@@ -17,15 +18,19 @@ public class ClientInterface {
     private HashMap<Integer,Evaluation> evalMap;
     private Validator valid;
     private HashSet<Account> active; 
-    
+    private Timer timer;
+    private boolean intervalCheck;
+    private int contributionTotal, contributionAccepted, contributionRejected;
+    private StringBuilder summary;
+
     /*
         ClientInterface objects are created by the server; do not instantiate these manually!
         @param key randomized string created by server for the client
         @param config Configuration object containing the settings for the interface
-        @param url the 
+        @param url the url of the database in the server machine
         @param server a reference to the server object
     */
-    public ClientInterface(String key, Configuration config, String url, Server server){
+    public ClientInterface(String key, Configuration config, String url, Server server, boolean ic){
         this.key = key;
         pool = new ConnectionPool(url,server.getUsername(),server.getPassword());
         client_name = config.getClientName();
@@ -40,15 +45,26 @@ public class ClientInterface {
         rating_scale = config.getRatingScale();
         active = new HashSet<Account>(); 
         this.server = server;
+        intervalCheck = ic;
+        contributionTotal = 0;
+        contributionAccepted = 0;
+        contributionRejected = 0;
         accMap = new HashMap<Integer, Account>();
         contMap = new HashMap<Integer, Contribution>();
         evalMap = new HashMap<Integer, Evaluation>();
         server.httpserver.createContext("/"+key,new ClientInterfaceHandler(this));
-        compFactory = new ComponentFactory(pool.getConnection(),this);
-        if(validation_type.equalsIgnoreCase("ad hoc"))scorer = new AdHocScorer(this);
-        else if(validation_type.equalsIgnoreCase("pagerank"))scorer = new PageRankScorer(this);
+        compFactory = new ComponentFactory(pool.getConnection(),this,intervalCheck);
+        if(validation_type.equalsIgnoreCase("ad hoc")){
+            scorer = new AdHocScorer(this);
+            valid = new AdHocValidator(this);
+        }
+        else if(validation_type.equalsIgnoreCase("pagerank")){
+            scorer = new PageRankScorer(this);
+            valid = new PageRankValidator(this, rating_scale/2.0);
+        }
         computeActive();
-        // valid = new TestValidator(this);
+        timer = new Timer();
+        summary = new StringBuilder();
     }
     
     /*
@@ -193,6 +209,7 @@ public class ClientInterface {
     
     public void putContribution(int id, Contribution co){
         contMap.put(id, co);
+        contributionTotal++;
     }
     
     public void putEvaluation(int id, Evaluation ev){
@@ -240,11 +257,43 @@ public class ClientInterface {
     public void addScorerComponent(Component c){
     	scorer.addComponent(c);
     }
+
+    /*
+        When called, it will create a scheduled TimerTask to call the checkContribution method when the 
+        evaluation period of a Contribution ends.
+        @param n the id of the contribution
+    */
+    public void addTimerTask(int n){
+        timer.schedule(new ExpiryCheckerTask(n,this),validation_time*1000);
+    }
     
-    public void acceptContribution(int n){
-        //scorer.acceptContribution(n);
+    /*
+        This method checks if a certain contribution must be accepted or rejected by the system
+        @param n the id of the contribution
+    */
+    public void checkContribution(int n){
+        boolean accept = valid.checkContribution(n);
+        if(accept){
+            scorer.acceptContribution(n);
+            contributionAccepted++;
+            summary.append(n+" Accepted\n");
+        }
+        else{
+            scorer.rejectContribution(n);
+            contributionRejected++;
+            summary.append(n+" Rejected\n");
+        }
+    }
+    /* 
+        This method is called to integrate a contribution to the system.
+        @param contribution_id the id of the contribution to be accepted
+    */
+    public void acceptContribution(int contribution_id){
+        //scorer.acceptContribution(contribution_id);
         //make scorer remove contribution and evaluations
-        Contribution cont = contMap.get(n);
+        Contribution cont = contMap.get(contribution_id);
+        // updateContributionDBStatus(contribution_id, "Accepted");
+        updateContributionDBStatus(contribution_id, 1);
         ArrayList<Evaluation> evals = cont.getEvaluations();
         for(int i=0; i<evals.size(); i++){
             Evaluation ev = evals.get(i);
@@ -254,6 +303,10 @@ public class ClientInterface {
         contMap.remove(cont.getId());
     }
 
+    /*
+        This method returns the top rated contributions in the system. This makes it easier for the admins of the client system to find the good contributions.
+        @param n the number of contributions to be returned
+    */
     public String getTopContributions(int n){
         ArrayList<Contribution> list = new ArrayList<Contribution>();
         Iterator<Integer> iter = contMap.keySet().iterator();
@@ -262,6 +315,53 @@ public class ClientInterface {
             list.add(contMap.get(id));
         }
         Collections.sort(list);
-        return "";
+        StringBuilder results = new StringBuilder();
+        results.append("Top "+n+" Contributions: \n");
+        for(int i=0; i<n; i++) {
+            Contribution contr = list.get(i);
+            results.append(contr.getId()+" "+contr.getContributionScore()+"\n");
+        }
+        return results.toString();
+    }
+
+    /*
+        This method is called to remove a contribution from the system.
+        @param contribution_id the id of the contribution to be rejected
+    */
+    public void rejectContribution(int contribution_id){
+        //scorer.rejectContribution(contribution_id);
+        //make scorer remove contribution and evaluations
+        Contribution cont = contMap.get(contribution_id);
+        // updateContributionDBStatus(contribution_id, "Rejected");
+        updateContributionDBStatus(contribution_id, 2);
+        ArrayList<Evaluation> evals = cont.getEvaluations();
+        for(int i=0; i<evals.size(); i++){
+            Evaluation ev = evals.get(i);
+            int id = ev.getId();
+            evalMap.remove(id);
+        }
+        contMap.remove(cont.getId());
+    }
+    
+    private void updateContributionDBStatus(int contribution_id, int status){
+        Connection conn = pool.getConnection();
+        try{
+            Statement st = conn.createStatement();
+            String update = "UPDATE Contributions"
+                    + "SET state = " + status
+                    + "WHERE contribution_id = " + contribution_id;  
+        }catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void printSummary(){
+        System.out.println(summary);
+        StringBuilder sb = new StringBuilder();
+        sb.append("Total: "+contributionTotal+"\n");
+        sb.append("Accepted: "+contributionAccepted+"\n");
+        sb.append("Rejected: "+contributionRejected+"\n");
+        System.out.println(sb);
     }
 }

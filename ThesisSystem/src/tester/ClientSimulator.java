@@ -49,7 +49,7 @@ public class ClientSimulator extends JFrame {
         serverURL = server.getText();
         obj = new URL(serverURL);
         clientName = client.getText();
-        config = new Configuration(client.getText(), validator.getText(), Integer.parseInt(time.getText()), 
+        config = new Configuration(clientName, validator.getText(), Integer.parseInt(time.getText()), 
             Double.parseDouble(score.getText()), Integer.parseInt(scale.getText()), Double.parseDouble(deg.getText()),
             Double.parseDouble(beta.getText()), Double.parseDouble(user_time.getText()), Double.parseDouble(eval_time.getText()));
         postURL = postConfig();

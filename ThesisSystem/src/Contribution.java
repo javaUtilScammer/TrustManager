@@ -123,4 +123,8 @@ public class Contribution extends Component implements Comparable<Contribution>
     public int compareTo(Contribution c){
             return Double.compare(contribution_score,c.getContributionScore());
     }
+
+    public Timestamp getCreatedAt(){
+        return created_at;
+    }
 }
