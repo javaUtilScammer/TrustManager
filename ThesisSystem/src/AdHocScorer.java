@@ -38,13 +38,19 @@ public class AdHocScorer extends Scorer{
         //get number of active users
         double active = intrface.getActiveCount();
         //compute for denominator ln(active) ^ degree_of_strictness
-        double denom = Math.log(active) / Math.log(Math.E); 
+        double denom = Math.log(intrface.getMval()) / Math.log(Math.E); 
         denom = Math.pow(denom,degree_of_strictness);
         double threshold = active/denom; 
         
         //score is a percentage of the threshold based on trust rating of contributor
         Account contributor = cont.getContributor(); 
         return threshold * contributor.getTrustRating() * contributor.getTrustConfidence(); 
+    }
+
+    public void acceptContribution(Contribution c){
+    }
+
+    public void rejectContribution(Contribution c){
     }
     
     /**
@@ -54,6 +60,7 @@ public class AdHocScorer extends Scorer{
      */
     public void calculateScore(Evaluation ev, Contribution cont)
     {
+        System.out.println("SCORINGGG");
         double currScore = cont.getContributionScore(); 
         double rating = ev.getRating(); 
         double scaled;

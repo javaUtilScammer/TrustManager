@@ -4,15 +4,45 @@ import java.util.*;
 public class PageRankScorer extends Scorer{
     
 	private final double eps = 1e-6;
+    private final double threshold;
 	private ArrayList<Account> accList;
 	private ArrayList<Contribution> conList;
 	private ArrayList<Evaluation> evaList;
 
-    public PageRankScorer(ClientInterface in){
+    public PageRankScorer(ClientInterface in, double t){
         super(in);
+        threshold = t;
         accList = new ArrayList<Account>();
         conList = new ArrayList<Contribution>();
         evaList = new ArrayList<Evaluation>();
+    }
+
+    public void checkAll(){
+        for(int i=0; i<conList.size(); i++){
+            Contribution cont = conList.get(i);
+            if(cont.getContributionScore()>threshold) acceptContribution(cont);
+        }
+    }
+
+    public void acceptContribution(Contribution c){
+        removeFromGraph(c);
+    }
+
+    public void rejectContribution(Contribution c){
+        removeFromGraph(c);
+    }
+
+    private void removeFromGraph(Contribution cont){
+        ArrayList<Evaluation> evals = cont.getEvaluations();
+        for(int i=0; i<evals.size(); i++){
+            Evaluation ev = evals.get(i);
+            evaList.remove(ev);
+        }
+        conList.remove(cont);
+    }
+
+    public double computeInitialScore(Contribution c){
+        return c.getContributionScore();
     }
 
     public void addComponent(Component c){

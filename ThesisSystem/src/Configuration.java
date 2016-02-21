@@ -12,7 +12,7 @@ public class Configuration {
     private int validation_time;
     private String client_name, validation_type;
     private double default_score, rating_scale, degree_of_strictness, beta_factor, active_user_time, active_evaluation_time; 
-
+    private String url;
     /**
      * 
      * @param client_name name of client system
@@ -25,7 +25,7 @@ public class Configuration {
      * @param active_user_time time since last update for a user to still be considered an active user 
      * @param active_evaluation_time time before effects of an evaluation of score decays 
      */
-    public Configuration(String client_name, String validation_type, int validation_time, double default_score, double rating_scale, double degree_of_strictness, double beta_factor, double active_user_time, double active_evaluation_time)
+    public Configuration(String client_name, String validation_type, int validation_time, double default_score, double rating_scale, double degree_of_strictness, double beta_factor, double active_user_time, double active_evaluation_time, String url)
     {
         this.client_name = client_name;
         this.validation_type = validation_type;
@@ -35,7 +35,8 @@ public class Configuration {
         this.degree_of_strictness = degree_of_strictness;
         this.beta_factor = beta_factor;
         this.active_user_time = active_user_time; 
-        this.active_evaluation_time = active_evaluation_time; 
+        this.active_evaluation_time = active_evaluation_time;
+        this.url = url;
     }
     
     /**
@@ -118,5 +119,9 @@ public class Configuration {
     public double getActiveEvaluationTime()
     {
         return active_evaluation_time; 
+    }
+
+    public String getURL(){
+        return url;
     }
 }

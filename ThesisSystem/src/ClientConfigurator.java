@@ -58,7 +58,7 @@ public class ClientConfigurator implements HttpHandler {
         // System.out.println("test: "+config.getClientName());
         DatabaseCreator dbc = new DatabaseCreator(config,conn);
         String key = dbc.createDatabase();
-        ClientInterface clientInt = new ClientInterface(key,config,root+config.getClientName(),server, false);
+        ClientInterface clientInt = new ClientInterface(key,config,root+config.getClientName(),server, false, config.getURL());
         Connection connector = clientInt.pool.getConnection();
         dbc.createTables(connector);
         clientInt.pool.returnConnection((connector));

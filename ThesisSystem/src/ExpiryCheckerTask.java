@@ -5,15 +5,15 @@ import java.util.*;
  * @author Migee
  */
 public class ExpiryCheckerTask extends TimerTask{
-    int contributionID;
+    Contribution contribution;
     ClientInterface intrface;
 
-    public ExpiryCheckerTask(int cid, ClientInterface ci){
-		contributionID = cid;
+    public ExpiryCheckerTask(Contribution c, ClientInterface ci){
+		contribution = c;
 		intrface = ci;
     }
 
     public void run(){
-    	intrface.checkContribution(contributionID);
+    	if(contribution.getState()==0) intrface.rejectContribution(contribution);
     }
 }

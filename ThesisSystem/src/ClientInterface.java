@@ -1,5 +1,7 @@
 import java.sql.*;
 import java.util.*;
+import java.io.*;
+import java.net.*;
 /**
  * ClientInterface objects are in charge of handling the interactions between the server and the clients.
  * @author Migee
@@ -22,6 +24,8 @@ public class ClientInterface {
     private boolean intervalCheck;
     private int contributionTotal, contributionAccepted, contributionRejected;
     private StringBuilder summary;
+    private int mval, evalCount;
+    private URL clientURL;
 
     /*
         ClientInterface objects are created by the server; do not instantiate these manually!
@@ -30,7 +34,7 @@ public class ClientInterface {
         @param url the url of the database in the server machine
         @param server a reference to the server object
     */
-    public ClientInterface(String key, Configuration config, String url, Server server, boolean ic){
+    public ClientInterface(String key, Configuration config, String url, Server server, boolean ic, String clientLink){
         this.key = key;
         pool = new ConnectionPool(url,server.getUsername(),server.getPassword());
         client_name = config.getClientName();
@@ -52,19 +56,24 @@ public class ClientInterface {
         accMap = new HashMap<Integer, Account>();
         contMap = new HashMap<Integer, Contribution>();
         evalMap = new HashMap<Integer, Evaluation>();
+        evalCount = 0;
         server.httpserver.createContext("/"+key,new ClientInterfaceHandler(this));
-        compFactory = new ComponentFactory(pool.getConnection(),this,intervalCheck);
         if(validation_type.equalsIgnoreCase("ad hoc")){
             scorer = new AdHocScorer(this);
             valid = new AdHocValidator(this);
         }
         else if(validation_type.equalsIgnoreCase("pagerank")){
-            scorer = new PageRankScorer(this);
-            valid = new PageRankValidator(this, rating_scale/2.0);
+            scorer = new PageRankScorer(this,rating_scale/2.0);
+            valid = new PageRankValidator(this,(PageRankScorer) scorer);
         }
+        compFactory = new ComponentFactory(pool.getConnection(),this,intervalCheck,scorer);
         computeActive();
         timer = new Timer();
         summary = new StringBuilder();
+        mval = 1;
+        try{
+            clientURL = new URL(clientLink);
+        }catch(Exception e){e.printStackTrace();}
     }
     
     /*
@@ -127,7 +136,6 @@ public class ClientInterface {
 		int contribution_id = rs.getInt(5); 
 		Account evaluator = accMap.get(created_by);
 		Contribution cont = contMap.get(contribution_id); 
-		
 		Evaluation eval = new Evaluation(evaluation_id, rating, created_at, evaluator, cont); 
                 evaluator.getEvaluations().add(eval); 
 		evalMap.put(evaluation_id, eval); 
@@ -214,6 +222,10 @@ public class ClientInterface {
     
     public void putEvaluation(int id, Evaluation ev){
         evalMap.put(id, ev);
+        int numev = ev.getContribution().getContributor().getNumEv();
+        if(numev>mval) mval = numev;
+        evalCount++;
+        if(valid.validate(ev)) acceptContribution(ev.getContribution());
     }
     
     public void score(Evaluation ev, int ci){
@@ -258,41 +270,33 @@ public class ClientInterface {
     	scorer.addComponent(c);
     }
 
+    public int getMval(){
+        return mval;
+    }
+
     /*
-        When called, it will create a scheduled TimerTask to call the checkContribution method when the 
-        evaluation period of a Contribution ends.
-        @param n the id of the contribution
+        When called, it will create a scheduled TimerTask to reject the Contribution when its 
+        evaluation period ends.
+        @param c the contribution
     */
-    public void addTimerTask(int n){
-        timer.schedule(new ExpiryCheckerTask(n,this),validation_time*1000);
+    public void addTimerTask(Contribution c){
+        timer.schedule(new ExpiryCheckerTask(c,this),validation_time*1000);
     }
     
-    /*
-        This method checks if a certain contribution must be accepted or rejected by the system
-        @param n the id of the contribution
-    */
-    public void checkContribution(int n){
-        boolean accept = valid.checkContribution(n);
-        if(accept){
-            scorer.acceptContribution(n);
-            contributionAccepted++;
-            summary.append(n+" Accepted\n");
-        }
-        else{
-            scorer.rejectContribution(n);
-            contributionRejected++;
-            summary.append(n+" Rejected\n");
-        }
-    }
     /* 
         This method is called to integrate a contribution to the system.
-        @param contribution_id the id of the contribution to be accepted
+        @param cont the Contribution
     */
-    public void acceptContribution(int contribution_id){
-        //scorer.acceptContribution(contribution_id);
-        //make scorer remove contribution and evaluations
-        Contribution cont = contMap.get(contribution_id);
-        // updateContributionDBStatus(contribution_id, "Accepted");
+    public void acceptContribution(Contribution cont){
+        int contribution_id = cont.getId();
+        cont.setState(1);
+        try{
+            post(contribution_id+"");
+        }
+        catch(Exception e){e.printStackTrace();}
+        scorer.acceptContribution(cont);
+        contributionAccepted++;
+        summary.append(contribution_id+" Accepted\n");
         updateContributionDBStatus(contribution_id, 1);
         ArrayList<Evaluation> evals = cont.getEvaluations();
         for(int i=0; i<evals.size(); i++){
@@ -300,7 +304,7 @@ public class ClientInterface {
             int id = ev.getId();
             evalMap.remove(id);
         }
-        contMap.remove(cont.getId());
+        contMap.remove(contribution_id);
     }
 
     /*
@@ -324,15 +328,46 @@ public class ClientInterface {
         return results.toString();
     }
 
+    public String post(String message) throws ProtocolException, IOException{
+        HttpURLConnection connection = (HttpURLConnection) clientURL.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
+        DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+        wr.writeBytes(message);
+        wr.flush();
+        wr.close();
+        System.out.println("\nSending reject to client, cont index:"+message);
+        // System.out.println("Post parameters : " + message);
+        int responseCode = connection.getResponseCode();        
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        connection.disconnect();
+        return response.toString();
+    }
+
     /*
         This method is called to remove a contribution from the system.
-        @param contribution_id the id of the contribution to be rejected
+        @param cont the Contribution
     */
-    public void rejectContribution(int contribution_id){
-        //scorer.rejectContribution(contribution_id);
-        //make scorer remove contribution and evaluations
-        Contribution cont = contMap.get(contribution_id);
-        // updateContributionDBStatus(contribution_id, "Rejected");
+    public void rejectContribution(Contribution cont){
+        //try checking again if accept
+        // if(){
+
+        // }
+        int contribution_id = cont.getId();
+        cont.setState(2);
+        try{
+            post(contribution_id+"");
+        }
+        catch(Exception e){e.printStackTrace();}
+        summary.append(contribution_id+" Rejected "+cont.getContributionScore()+" "+"\n");
+        scorer.rejectContribution(cont);
+        contributionRejected++;
         updateContributionDBStatus(contribution_id, 2);
         ArrayList<Evaluation> evals = cont.getEvaluations();
         for(int i=0; i<evals.size(); i++){
@@ -340,7 +375,7 @@ public class ClientInterface {
             int id = ev.getId();
             evalMap.remove(id);
         }
-        contMap.remove(cont.getId());
+        contMap.remove(contribution_id);
     }
     
     private void updateContributionDBStatus(int contribution_id, int status){
@@ -354,14 +389,25 @@ public class ClientInterface {
         {
             e.printStackTrace();
         }
+        pool.returnConnection(conn);
     }
 
-    private void printSummary(){
-        System.out.println(summary);
-        StringBuilder sb = new StringBuilder();
-        sb.append("Total: "+contributionTotal+"\n");
-        sb.append("Accepted: "+contributionAccepted+"\n");
-        sb.append("Rejected: "+contributionRejected+"\n");
-        System.out.println(sb);
+    public void printSummary(){
+        try{
+            PrintWriter out = new PrintWriter(new FileWriter("serverLog.txt",true));
+            StringBuilder sb = new StringBuilder();
+            // sb.append("Total: "+contributionTotal+"\n");
+            // sb.append("Accepted: "+contributionAccepted+"\n");
+            // sb.append("Rejected: "+contributionRejected+"\n");
+            sb.append(contributionTotal+"\n");
+            sb.append(contributionAccepted+"\n");
+            sb.append(contributionRejected+"\n");
+            sb.append(evalCount+"\n");
+            out.println(sb);
+            out.print(summary);
+            out.println("******");
+            out.flush();
+        }
+        catch(Exception e){e.printStackTrace();}
     }
 }

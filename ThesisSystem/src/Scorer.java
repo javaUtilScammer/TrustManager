@@ -27,8 +27,8 @@ public abstract class Scorer {
     public void addComponent(Component c){
         compList.add(c);
     }
-
+    abstract double computeInitialScore(Contribution cont);
     abstract void calculateScore(Evaluation ev, Contribution cont);
-    // abstract void acceptContribution(int cont_id);
-    // abstract void rejectContribution(int cont_id);
+    abstract void acceptContribution(Contribution cont);
+    abstract void rejectContribution(Contribution cont);
 }

@@ -127,4 +127,12 @@ public class Contribution extends Component implements Comparable<Contribution>
     public Timestamp getCreatedAt(){
         return created_at;
     }
+
+    public void setState(int s){
+        state = s;
+    }
+
+    public int getState(){
+        return state;
+    }
 }

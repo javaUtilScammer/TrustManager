@@ -25,20 +25,24 @@ public class ClientInterfaceHandler implements HttpHandler {
             StringBuilder sb = new StringBuilder();
             while(sc.hasNextLine()) sb.append(sc.nextLine());
             System.out.println(sb);
-            // String[] tokens = sb.toString().split(" ");
-            int resp = intrface.compFactory.create(sb.toString());
-            // if(tokens[0].equals("create")){
-            //     int resp = intrface.compFactory.create(sb.toString());
-            // }
-            // else if(tokens[0].equals("accept")){
-            // intrface.acceptContribution(Integer.parseInt(tokens[1]));
-            // }
-            // else if(tokens[0].equals("get")){
-            // intrface.getTopContibutions(Integer.parseInt(tokens[1]));
-            // }
+            String[] tokens = sb.toString().split(" ");
             String response = "";
-            if(resp==-1) response = "ERROR";
-            else response = resp+"";
+            // int resp = intrface.compFactory.create(sb.toString());
+            if(tokens[0].equals("create")){
+                int resp = intrface.compFactory.create(tokens[1]);
+                if(resp==-1) response = "ERROR";
+                else response = resp+"";
+            }
+            else if(tokens[0].equals("accept")){
+                intrface.acceptContribution(intrface.getContribution(Integer.parseInt(tokens[1])));
+                response = "ok";
+            }
+            else if(tokens[0].equals("get")){
+                response = intrface.getTopContributions(Integer.parseInt(tokens[1]));
+            }
+            else if(tokens[0].equals("print")){
+                intrface.printSummary();
+            }
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());

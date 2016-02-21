@@ -29,7 +29,7 @@ public class ClientTest{
     public ClientTest(String url) throws Exception{
         serverURL = url;
         obj = new URL(url);
-        config = new Configuration("testClient","PageRank",10,2.5,5,1.0,1.0,1.0,1.0);
+        // config = new Configuration("testClient","PageRank",10,2.5,5,1.0,1.0,1.0,1.0);
     }
 
     // public String get() throws Exception{

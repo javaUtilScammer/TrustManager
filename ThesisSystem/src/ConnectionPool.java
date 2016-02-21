@@ -17,7 +17,7 @@ import java.util.ArrayDeque;
 public class ConnectionPool {
     String url;
     ArrayDeque<Connection> pool;
-    final int capacity = 50;
+    final int capacity = 100;
     
     /*
         @param url the url of the database

@@ -42,6 +42,7 @@ public class SystemTester2{
 			postConfig();
         	readInput();
             readScript();
+            printSummary();
 		}
 		catch(IOException e){}
     }
@@ -58,9 +59,9 @@ public class SystemTester2{
     	beta_factor = in.readLine();
     	active_time = in.readLine();
     	eval_time = in.readLine();
-    	config = new Configuration(clientName, valid_type, Integer.parseInt(valid_time), 
-            Double.parseDouble(default_score), Integer.parseInt(rating_scale), Double.parseDouble(degree_strict),
-            Double.parseDouble(beta_factor), Double.parseDouble(active_time), Double.parseDouble(eval_time));
+    	// config = new Configuration(clientName, valid_type, Integer.parseInt(valid_time), 
+            // Double.parseDouble(default_score), Integer.parseInt(rating_scale), Double.parseDouble(degree_strict),
+            // Double.parseDouble(beta_factor), Double.parseDouble(active_time), Double.parseDouble(eval_time));
     	interval = Long.parseLong(in.readLine());
     	in.readLine();
     	if(logging){
@@ -105,7 +106,11 @@ public class SystemTester2{
     			double ccc = Double.parseDouble(input[3]);
     			double cce = Double.parseDouble(input[4]);
     			AccountJSON2 acc = new AccountJSON2(accounts.size()+"", cc, ce, ccc, cce);
-    			String temp = post(gson.toJson(acc));
+    			String temp = "";
+                try{
+                    temp = post(gson.toJson(acc));
+                }
+                catch(Exception e){e.printStackTrace();}
     			System.out.println("Account "+acc.username+" created, ID: "+temp);
     			accounts.add(acc);
     		}
@@ -142,6 +147,15 @@ public class SystemTester2{
                 }
             }
         }
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException ex) {
+        }
+        postPrint();
+    }
+
+    public void printSummary(){
+
     }
 
     public String post(String message) throws ProtocolException, IOException{
@@ -149,11 +163,33 @@ public class SystemTester2{
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
         DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-        wr.writeBytes(message);
+        wr.writeBytes("create "+message);
         wr.flush();
         wr.close();
 		// System.out.println("\nSending 'POST' request to URL : " + serverURL);
 		System.out.println("Post parameters : " + message);
+        int responseCode = connection.getResponseCode();        
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        connection.disconnect();
+        return response.toString();
+    }
+
+    public String postPrint() throws ProtocolException, IOException{
+        HttpURLConnection connection = (HttpURLConnection) objPost.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
+        DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+        wr.writeBytes("print");
+        wr.flush();
+        wr.close();
+        // System.out.println("\nSending 'POST' request to URL : " + serverURL);
+        // System.out.println("Post parameters : " + message);
         int responseCode = connection.getResponseCode();        
         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String inputLine;

@@ -13,13 +13,14 @@ import java.util.*;
 
 public class PageRankValidator extends Validator {
     private double threshold;
+    private PageRankScorer scorer;
     /**
      * Constructor simply calls on superclass constructor
      * @param in ClientInterface necessary for Validator to work passed on to superclass
      */
-    public PageRankValidator(ClientInterface in, double t){
+    public PageRankValidator(ClientInterface in, PageRankScorer s){
         super(in);
-        threshold = t;
+        scorer = s;
     }
     
     /**
@@ -28,10 +29,8 @@ public class PageRankValidator extends Validator {
      * @return whether or not Contribution has reached the threshold necessary for integration
      */
     public boolean validate(Evaluation ev){
-        Contribution cont = ev.getContribution();
-        boolean b = true;
-        if(cont.getContributionScore()<=threshold) b = false;
-        return b;
+        scorer.checkAll();
+        return false;
     }
     
 }
