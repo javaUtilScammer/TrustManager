@@ -26,6 +26,13 @@ public class AdHocValidator extends Validator {
      * @param ev new Evaluation that was just used to compute the new score of a Contribution
      * @return whether or not Contribution has reached the threshold necessary for integration
      */
+    public double computeTrustRating(double accepted, double rejected, double total)
+    {
+        double ret = 0.50; 
+        double mult = (accepted-rejected)/total; 
+        ret += (0.50 * mult);
+        return ret; 
+    }
     public boolean validate(Contribution cont)
     {
         double score = cont.getContributionScore(); 
@@ -68,6 +75,8 @@ public class AdHocValidator extends Validator {
                     sub.incRejected(rej+(scaled*0.50)); 
                 sub.incTotal(total+0.50); 
                 
+                double newTrust = computeTrustRating(sub.getAccepted(), sub.getRejected(), sub.getTotal()); 
+                sub.setTrustConfidence(newTrust,conn); 
                 //update the database
                 sub.updateDB(conn); 
             }
@@ -77,6 +86,8 @@ public class AdHocValidator extends Validator {
             user.incAccepted(user.getAccepted()+1); 
             user.incTotal(user.getTotal()+1);
             user.updateDB(conn);
+            double newTrust = computeTrustRating(user.getAccepted(), user.getRejected(), user.getTotal()); 
+            user.setTrustConfidence(newTrust,conn); 
             intrface.returnConnection(conn);
             return true; 
         }else return false; 
