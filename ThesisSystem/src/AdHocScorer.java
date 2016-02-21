@@ -60,7 +60,7 @@ public class AdHocScorer extends Scorer{
      */
     public void calculateScore(Evaluation ev, Contribution cont)
     {
-        System.out.println("SCORINGGG");
+        // System.out.println("SCORINGGG");
         double currScore = cont.getContributionScore(); 
         double rating = ev.getRating(); 
         double scaled;

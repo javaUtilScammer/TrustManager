@@ -294,9 +294,9 @@ public class ClientInterface {
             post(contribution_id+"");
         }
         catch(Exception e){e.printStackTrace();}
+        summary.append(contribution_id+" Accepted"+cont.getContributionScore()+"\n");
         scorer.acceptContribution(cont);
         contributionAccepted++;
-        summary.append(contribution_id+" Accepted\n");
         updateContributionDBStatus(contribution_id, 1);
         ArrayList<Evaluation> evals = cont.getEvaluations();
         for(int i=0; i<evals.size(); i++){
@@ -355,17 +355,18 @@ public class ClientInterface {
         @param cont the Contribution
     */
     public void rejectContribution(Contribution cont){
-        //try checking again if accept
-        // if(){
-
-        // }
+        // try checking again if accept
+        if(valid.validate(cont)){
+             acceptContribution(cont);
+             return;
+        }
         int contribution_id = cont.getId();
         cont.setState(2);
         try{
             post(contribution_id+"");
         }
         catch(Exception e){e.printStackTrace();}
-        summary.append(contribution_id+" Rejected "+cont.getContributionScore()+" "+"\n");
+        summary.append(contribution_id+" Rejected "+cont.getContributionScore()+"\n");
         scorer.rejectContribution(cont);
         contributionRejected++;
         updateContributionDBStatus(contribution_id, 2);

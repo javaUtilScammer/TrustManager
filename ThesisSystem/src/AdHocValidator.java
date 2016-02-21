@@ -40,7 +40,7 @@ public class AdHocValidator extends Validator {
         double denom = Math.log(active) / Math.log(Math.E); 
         denom = Math.pow(denom,degree_of_strictness);
         double threshold = active/denom; 
-        
+        System.out.println("Threshold for "+cont.getId()+" "+threshold);
         //If accepted, modify the scores of Evaluators that Evaluated this accepted function
         if(score>=threshold)
         {
