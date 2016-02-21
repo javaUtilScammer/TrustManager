@@ -26,9 +26,8 @@ public class AdHocValidator extends Validator {
      * @param ev new Evaluation that was just used to compute the new score of a Contribution
      * @return whether or not Contribution has reached the threshold necessary for integration
      */
-    public boolean validate(Evaluation ev)
+    public boolean validate(Contribution cont)
     {
-        Contribution cont = ev.getContribution();
         double score = cont.getContributionScore(); 
         double active = intrface.getActiveCount();
         double denom = Math.log(active) / Math.log(Math.E); 
@@ -74,7 +73,7 @@ public class AdHocValidator extends Validator {
             }
             
             //Contributor gets trust rating score modified also
-            Account user = ev.getCreatedBy();
+            Account user = cont.getContributor();
             user.incAccepted(user.getAccepted()+1); 
             user.incTotal(user.getTotal()+1);
             user.updateDB(conn);

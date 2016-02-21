@@ -27,8 +27,7 @@ public class PageRankValidator extends Validator {
      * @param ev new Evaluation that was just used to compute the new score of a Contribution
      * @return whether or not Contribution has reached the threshold necessary for integration
      */
-    public boolean validate(Evaluation ev){
-        Contribution cont = ev.getContribution();
+    public boolean validate(Contribution cont){
         boolean b = true;
         if(cont.getContributionScore()<=threshold) b = false;
         return b;
