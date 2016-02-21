@@ -36,9 +36,9 @@ public class AdHocScorer extends Scorer{
     {
         //first compute for the threshold
         //get number of active users
-        double active = intrface.getActiveCount();
+        double active = Math.max(intrface.getActiveCount(),5);
         //compute for denominator ln(active) ^ degree_of_strictness
-        double denom = Math.log(intrface.getMval()) / Math.log(Math.E); 
+        double denom = Math.log(active / Math.log(Math.E)); 
         denom = Math.pow(denom,degree_of_strictness);
         double threshold = active/denom; 
         
@@ -85,7 +85,7 @@ public class AdHocScorer extends Scorer{
 
         double conf = contributor.getTrustConfidence(); 
         double active = intrface.getActiveCount();
-        double num = Math.log(active)/Math.log(Math.E); 
+        double num = Math.log(intrface.getMval())/Math.log(Math.E); 
         num = Math.pow(num,beta_factor); 
         num/=active; 
         num*=contributor.getNumEv(); 
