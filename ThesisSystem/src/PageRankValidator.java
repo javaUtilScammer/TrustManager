@@ -32,5 +32,10 @@ public class PageRankValidator extends Validator {
         scorer.checkAll();
         return false;
     }
+    public boolean validate(Contribution cont){
+        boolean b = true;
+        if(cont.getContributionScore()<=threshold) b = false;
+        return b;
+    }
     
 }

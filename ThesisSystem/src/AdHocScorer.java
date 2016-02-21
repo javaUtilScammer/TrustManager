@@ -83,16 +83,15 @@ public class AdHocScorer extends Scorer{
         cont.setContributionScore(currScore,conn);
         Account contributor = cont.getContributor(); 
 
-            double conf = contributor.getTrustConfidence(); 
-            double active = intrface.getActiveCount();
-            double num = Math.log(active)/Math.log(Math.E); 
-            num = Math.pow(num,beta_factor); 
-            num/=active; 
-            num*=contributor.getNumEv(); 
-            conf = Math.min(1, 0.50 + 0.50*num );
+        double conf = contributor.getTrustConfidence(); 
+        double active = intrface.getActiveCount();
+        double num = Math.log(active)/Math.log(Math.E); 
+        num = Math.pow(num,beta_factor); 
+        num/=active; 
+        num*=contributor.getNumEv(); 
+        conf = Math.min(1, 0.50 + 0.50*num );
                     
         contributor.setTrustConfidence(conf,conn); 
         intrface.returnConnection(conn);
-        
     }
 }

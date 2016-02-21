@@ -25,5 +25,5 @@ public abstract class Validator {
      * @param ev the Evaluation submitted and was recently used to modify the score of a Contrbution
      * @return whether or not the Contribution rated by the Evaluation has reached the threshold computed
      */
-    public abstract boolean validate(Evaluation ev);
+    public abstract boolean validate(Contribution cont);
 }

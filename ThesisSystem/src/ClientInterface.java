@@ -225,7 +225,7 @@ public class ClientInterface {
         int numev = ev.getContribution().getContributor().getNumEv();
         if(numev>mval) mval = numev;
         evalCount++;
-        if(valid.validate(ev)) acceptContribution(ev.getContribution());
+        if(valid.validate(ev.getContribution())) acceptContribution(ev.getContribution());
     }
     
     public void score(Evaluation ev, int ci){
