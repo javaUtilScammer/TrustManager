@@ -36,7 +36,7 @@ public class AdHocValidator extends Validator {
     public boolean validate(Contribution cont)
     {
         double score = cont.getContributionScore(); 
-        double active = intrface.getActiveCount();
+        double active = Math.max(intrface.getActiveCount(),5);
         double denom = Math.log(active) / Math.log(Math.E); 
         denom = Math.pow(denom,degree_of_strictness);
         double threshold = active/denom; 

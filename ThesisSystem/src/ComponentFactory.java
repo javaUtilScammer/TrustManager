@@ -68,6 +68,11 @@ public class ComponentFactory {
                 intrface.addScorerComponent(co);
                 cb.releaseConnection();
                 ret = co.getId();
+                
+                //FOR SIMULATION ONLY!
+                intrface.addActive(contributor); 
+                
+                
                 if(!intervalCheck) intrface.addTimerTask(co);
             }
             catch(Exception e){e.printStackTrace();}
@@ -94,6 +99,9 @@ public class ComponentFactory {
                 eb.releaseConnection();
                 intrface.score(ev, conId);
                 ret = ev.getId();
+                
+                //FOR SIMULATION ONLY!
+                intrface.addActive(contributor); 
             }
             catch(Exception e){e.printStackTrace();}
         }

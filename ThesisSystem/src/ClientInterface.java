@@ -169,6 +169,10 @@ public class ClientInterface {
         }
     }
     
+    public void addActive(Account acc)
+    {
+        active.add(acc);
+    }
     /*
 
     */
